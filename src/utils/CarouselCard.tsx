@@ -42,7 +42,7 @@ export const CarouselCard = props => {
               style={styles.showMoreButton}
               textColor="red"
               onPress={() => console.log('Pressed')}>
-              <Text>Ver más.</Text>
+              <Text>Ver más</Text>
             </Button>
           </View>
           <Image
