@@ -4,4 +4,5 @@ module.exports = {
   rules: {
     'prettier/prettier': 0,
   },
+  'plugin:react/jsx-runtime': 'extends',
 };

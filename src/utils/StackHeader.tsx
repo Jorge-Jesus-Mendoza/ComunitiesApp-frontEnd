@@ -1,6 +1,6 @@
 import React from 'react';
-import {Appbar, Text} from 'react-native-paper';
-import {Image, StyleSheet, View} from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { Appbar } from 'react-native-paper';
 
 const StackHeader = props => {
   const {navigation, scene} = props;
@@ -24,7 +24,7 @@ const StackHeader = props => {
       />
       <Appbar.Action
         icon="menu"
-        onPress={() => console.log('Notification pressed')}
+        onPress={() => navigation.toggleDrawer()}
       />
     </Appbar.Header>
   );

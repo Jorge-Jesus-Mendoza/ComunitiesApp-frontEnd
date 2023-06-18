@@ -1,19 +1,20 @@
-import React from 'react';
-import 'react-native-gesture-handler';
-import {DashboardScreen} from './src/screens/DashboardScreen';
-import {NavigationContainer} from '@react-navigation/native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {Provider as PaperProvider} from 'react-native-paper';
-import {StackNavigator} from './src/navigator/StackNavigator';
-import {DrawerNavigator} from './src/navigator/DrawerNavigator';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { ReactNode } from 'react';
+import AuthProvider from './src/context/AuthContext';
+import SideMenu from './src/navigator/DrawerNavigator';
 
 const App = () => {
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <StackNavigator />
-      </NavigationContainer>
-    </PaperProvider>
+    <NavigationContainer>
+      <AppState>
+        <SideMenu />
+      </AppState>
+    </NavigationContainer>
   );
+};
+
+const AppState = ({ children }: { children: ReactNode; }) => {
+  return <AuthProvider>{children}</AuthProvider>;
 };
 export default App;

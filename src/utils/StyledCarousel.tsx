@@ -1,7 +1,7 @@
 import React from 'react';
-import {View} from 'react-native';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {CarouselCard} from './CarouselCard';
+import { View } from 'react-native';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { CarouselCard } from './CarouselCard';
 
 export const StyledCarousel = props => {
   const {cardData, width, date, onSnapToItem} = props;
@@ -16,6 +16,7 @@ export const StyledCarousel = props => {
         itemWidth={width * 0.8}
         onSnapToItem={onSnapToItem}
         inactiveSlideOpacity={0.5}
+        keyExtractor={item => item.id.toString()}
       />
       <Pagination
         dotsLength={cardData.cardsList.length}
