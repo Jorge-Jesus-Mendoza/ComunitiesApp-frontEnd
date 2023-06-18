@@ -1,15 +1,14 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {View, useWindowDimensions, ScrollView} from 'react-native';
-import {TestDataCarousel, TestDataNews} from '../api/TestData';
+import { useState } from 'react';
+import { ScrollView, View, useWindowDimensions } from 'react-native';
+import { TestDataCarousel, TestDataNews } from '../api/TestData';
 
 import moment from 'moment';
-import {styles} from '../theme/appTheme';
-import {Drawer, Text} from 'react-native-paper';
-import {StyledCarousel} from '../utils/StyledCarousel';
-import {LoginMenu} from '../utils/LoginMenu';
-import {NewsCard} from '../utils/NewsCard';
-import {StatsCard} from '../utils/StatsCard';
+import { Text } from 'react-native-paper';
+import { styles } from '../theme/appTheme';
+import { LoginMenu } from '../utils/LoginMenu';
+import { NewsCard } from '../utils/NewsCard';
+import { StatsCard } from '../utils/StatsCard';
+import { StyledCarousel } from '../utils/StyledCarousel';
 
 export const DashboardScreen = () => {
   const {width, height} = useWindowDimensions();
@@ -21,7 +20,7 @@ export const DashboardScreen = () => {
 
   const date = moment();
 
-  const onSnapToItem = index => {
+  const onSnapToItem = (index: number) => {
     setCardData({...cardData, activeSlide: index});
   };
 

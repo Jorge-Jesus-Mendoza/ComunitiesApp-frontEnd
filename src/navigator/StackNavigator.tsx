@@ -1,6 +1,6 @@
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {DashboardScreen} from '../screens/DashboardScreen';
+import { DashboardScreen } from '../screens/DashboardScreen';
 import StackHeader from '../utils/StackHeader';
 
 export type RootStackParams = {
@@ -12,10 +12,9 @@ export type RootStackParams = {
 
 const Stack = createStackNavigator<RootStackParams>();
 
-export const StackNavigator = () => {
+const StackNavigator = () => {
   return (
     <Stack.Navigator
-      // initialRouteName="Pagina2Screen"
       screenOptions={{
         header: ({scene, navigation}) => (
           <StackHeader scene={scene} navigation={navigation} />
@@ -29,3 +28,4 @@ export const StackNavigator = () => {
     </Stack.Navigator>
   );
 };
+export default StackNavigator;
