@@ -1,30 +1,33 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import { DashboardScreen } from '../screens/DashboardScreen';
-import StackHeader from '../utils/StackHeader';
+import {DashboardScreen} from '../screens/HomeScreen';
+import StackHeader from '../components/StackHeader';
+import {LoginScreen} from '../screens/LoginScreen';
+import {Dashboard} from '../routes/Home';
+import {Login} from '../routes/Login';
 
-export type RootStackParams = {
-  DashboardScreen: undefined;
-  Pagina2Screen: undefined;
-  Pagina3Screen: undefined;
-  PersonaScreen: {id: number; nombre: string};
-};
+// export type RootStackParams = {
+//   DashboardScreen: undefined;
+//   Pagina2Screen: undefined;
+//   Pagina3Screen: undefined;
+//   PersonaScreen: {id: number; nombre: string};
+// };
 
-const Stack = createStackNavigator<RootStackParams>();
+// const Stack = createStackNavigator<RootStackParams>();
+
+const Stack = createStackNavigator();
+
+const RoutesList = [Dashboard, Login];
 
 const StackNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        header: ({scene, navigation}) => (
-          <StackHeader scene={scene} navigation={navigation} />
-        ),
+        headerShown: false,
       }}>
-      <Stack.Screen
-        name="DashboardScreen"
-        options={{headerTitle: 'Dashboard'}}
-        component={DashboardScreen}
-      />
+      {RoutesList.map(route => (
+        <Stack.Screen name={route.name} component={route.component} />
+      ))}
     </Stack.Navigator>
   );
 };

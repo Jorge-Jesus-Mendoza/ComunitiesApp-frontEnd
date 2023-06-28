@@ -1,59 +1,42 @@
-import { useState } from 'react';
-import { ScrollView, View, useWindowDimensions } from 'react-native';
-import { TestDataCarousel, TestDataNews } from '../api/TestData';
-
-import moment from 'moment';
-import { Text } from 'react-native-paper';
-import { styles } from '../theme/appTheme';
-import { LoginMenu } from '../utils/LoginMenu';
-import { NewsCard } from '../utils/NewsCard';
-import { StatsCard } from '../utils/StatsCard';
-import { StyledCarousel } from '../utils/StyledCarousel';
+import React, {useState} from 'react';
+import {Button, Text, TextInput} from 'react-native-paper';
+import {ScrollView, View, Image, useWindowDimensions} from 'react-native';
+import {styles, colors} from '../theme/appTheme';
+import {useContext} from 'react';
+import {AuthContext} from '../context/AuthContext';
 
 export const DashboardScreen = () => {
   const {width, height} = useWindowDimensions();
-
-  const [cardData, setCardData] = useState({
-    cardsList: TestDataCarousel,
-    activeSlide: 0,
-  });
-
-  const date = moment();
-
-  const onSnapToItem = (index: number) => {
-    setCardData({...cardData, activeSlide: index});
-  };
-
+  const {authState} = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View>
-          <StyledCarousel
-            cardData={cardData}
-            width={width}
-            date={date}
-            onSnapToItem={onSnapToItem}
-          />
-        </View>
-        <LoginMenu width={width} />
-
-        {TestDataNews.map(news => (
-          <NewsCard title={news?.title} uri={news.uri} content={news.content} />
-        ))}
-
-        <StatsCard usersRegistered={22.7} usersAttended={5.8} width={width} />
-
         <View
           style={{
+            backgroundColor: 'white',
             flex: 1,
-            justifyContent: 'center',
+            padding: 20,
             alignItems: 'center',
-            backgroundColor: 'black',
-            height: 150,
+            marginVertical: 15,
+            borderRadius: 20,
           }}>
-          <Text style={{color: 'white', fontWeight: 'bold', fontSize: 20}}>
-            Comunities App
-          </Text>
+          <Image
+            source={{
+              uri: 'https://cdn-icons-png.flaticon.com/512/1299/1299961.png',
+            }}
+            style={{
+              width: 150,
+              height: 150,
+              borderRadius: 100,
+            }}
+          />
+          <View style={{width: width * 0.8}}>
+            <Text
+              style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+              Bienvenido{'\n'}
+              {authState.userName} {authState.lastName}
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </View>

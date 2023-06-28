@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import { Appbar } from 'react-native-paper';
+import {Image, StyleSheet, View} from 'react-native';
+import {Appbar} from 'react-native-paper';
 
 const StackHeader = props => {
   const {navigation, scene} = props;
@@ -9,23 +9,20 @@ const StackHeader = props => {
       style={{
         backgroundColor: 'white',
       }}>
-      {navigation.canGoBack() && (
+      {/* {navigation.canGoBack() && (
         <Appbar.BackAction onPress={() => navigation.pop()} />
-      )}
+      )} */}
       <Appbar.Content
         title={
           <View style={styles.container}>
             <Image
-              source={require('../img/patria_login_id.png')}
+              source={require('../img/Comuna-o-Nada-scaled-e1654199487274.jpg')}
               style={styles.img_title}
             />
           </View>
         }
       />
-      <Appbar.Action
-        icon="menu"
-        onPress={() => navigation.toggleDrawer()}
-      />
+      <Appbar.Action icon="menu" onPress={() => navigation.toggleDrawer()} />
     </Appbar.Header>
   );
 };

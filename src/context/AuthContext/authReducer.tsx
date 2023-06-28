@@ -1,10 +1,10 @@
-import { AuthState, authInitialState } from '.';
+import {AuthState, authInitialState} from '.';
+import {registerUserItem, userItem} from '../../interfaces/authInterfaces';
 
 type AuthAction =
-  | { type: 'signIn'; }
-  | { type: 'logout'; }
-  | { type: 'favoriteIcon'; payload: string; }
-  | { type: 'changeUserName'; payload: string; };
+  | {type: 'logIn'; payload: userItem}
+  | {type: 'sigIn'; payload: userItem}
+  | {type: 'logout'};
 
 export default function authReducer(
   state: AuthState,
@@ -12,25 +12,28 @@ export default function authReducer(
 ): AuthState {
   console.log('action.type', action);
   switch (action.type) {
-    case 'signIn':
+    case 'logIn':
       return {
         ...state,
         isLoggedIn: true,
+        userName: action.payload.name,
+        lastName: action.payload.last_name,
+        tokenId: action.payload.token,
+        identification_card: action.payload.identification_card,
       };
-    case 'favoriteIcon':
+    case 'sigIn':
       return {
         ...state,
-        favoriteIcon: action.payload,
+        isLoggedIn: true,
+        userName: action.payload.name,
+        lastName: action.payload.last_name,
+        tokenId: action.payload.token,
+        identification_card: action.payload.identification_card,
       };
     case 'logout':
       return {
         ...state,
         ...authInitialState,
-      };
-    case 'changeUserName':
-      return {
-        ...state,
-        userName: action.payload,
       };
 
     default:
