@@ -1,30 +1,29 @@
-import React, {useContext, useEffect, useState} from 'react';
+import moment from 'moment';
+import React, { useContext, useState } from 'react';
+import {
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {
   Button,
   Divider,
-  Text,
-  TextInput,
   RadioButton,
-  Snackbar,
+  Text,
+  TextInput
 } from 'react-native-paper';
-import {
-  ScrollView,
-  View,
-  Image,
-  useWindowDimensions,
-  TouchableOpacity,
-} from 'react-native';
-import {styles, colors} from '../theme/appTheme';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import moment from 'moment';
-import DropDownPicker from 'react-native-dropdown-picker';
-import {AuthContext} from '../context/AuthContext/index';
-import customFetch from '../components/customFetch';
+import communityApi from '../api/communityApi';
 import Alert from '../components/Alert';
+import { AuthContext } from '../context/AuthContext/index';
 import {
   initialRegisterData,
   registerUserItem,
 } from '../interfaces/authInterfaces';
+import { styles } from '../theme/appTheme';
 
 export const RegisterScreen = props => {
   const {width, height} = useWindowDimensions();
@@ -55,7 +54,7 @@ export const RegisterScreen = props => {
   const handleSubmit = async () => {
     if (repeatPassword === formValues.password) {
       const DataToSend = async () => {
-        const {data} = await customFetch.post('auth/register', formValues);
+        const { data } = await communityApi.post('/auth/register', formValues);
         return data;
       };
       try {

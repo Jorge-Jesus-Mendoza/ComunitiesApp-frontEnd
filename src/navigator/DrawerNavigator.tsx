@@ -3,16 +3,16 @@ import {
   DrawerContentScrollView,
   createDrawerNavigator,
 } from '@react-navigation/drawer';
+import { InternalMenuStyled } from '../components/InternalMenuStyled';
 import StackHeader from '../components/StackHeader';
-import {InternalMenuStyled} from '../components/InternalMenuStyled';
-import {Home} from '../routes/Home';
-import {Login} from '../routes/Login';
-import {Register} from '../routes/Register';
-import {Dashboard} from '../routes/Dashboard';
+import { Home } from '../routes/Home';
+import { Login } from '../routes/Login';
+import { Register } from '../routes/Register';
+import TopTabNavigator from './TopTabNavigator';
 
 const Drawer = createDrawerNavigator();
 
-const RoutesList = [Home, Login, Register, Dashboard];
+const RoutesList = [Home, Login, Register,];
 const SideMenu = () => {
   return (
     <Drawer.Navigator
@@ -22,6 +22,8 @@ const SideMenu = () => {
         ),
       }}
       drawerContent={props => <InternalMenu {...props} />}>
+      <Drawer.Screen name={"TobTabNavigator"} component={TopTabNavigator} />
+
       {RoutesList.map(route => (
         <Drawer.Screen name={route.name} component={route.component} />
       ))}
