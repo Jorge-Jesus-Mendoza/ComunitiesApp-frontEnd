@@ -1,10 +1,10 @@
-import React, {useContext, useState} from 'react';
-import {Button, Text, TextInput} from 'react-native-paper';
-import {ScrollView, View, Image, useWindowDimensions} from 'react-native';
-import {styles, colors} from '../theme/appTheme';
-import customFetch from '../components/customFetch';
-import {AuthContext} from '../context/AuthContext';
-import {initialLoginData, loginItem} from '../interfaces/authInterfaces';
+import React, { useContext, useState } from 'react';
+import { Image, ScrollView, View, useWindowDimensions } from 'react-native';
+import { Button, Text, TextInput } from 'react-native-paper';
+import communityApi from '../api/communityApi';
+import { AuthContext } from '../context/AuthContext';
+import { initialLoginData, loginItem } from '../interfaces/authInterfaces';
+import { styles } from '../theme/appTheme';
 
 export const LoginScreen = props => {
   const {width, height} = useWindowDimensions();
@@ -24,12 +24,12 @@ export const LoginScreen = props => {
   };
 
   const handleSubmit = () => {
-    customFetch
-      .post('auth/login', formValues)
+    communityApi
+      .post('/auth/login', formValues)
       .then(response => {
         logIn(response.data);
         setFormValues(initialLoginData);
-        props.navigation.navigate('DashboardScreen');
+        props.navigation.navigate('TobTabNavigator');
       })
       .catch(error => {
         if (error.response) {

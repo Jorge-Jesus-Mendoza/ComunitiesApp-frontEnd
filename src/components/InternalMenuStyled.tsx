@@ -1,9 +1,8 @@
-import {DrawerContentScrollView} from '@react-navigation/drawer';
-import {useRoute} from '@react-navigation/native';
-import React, {useContext, useState} from 'react';
-import {Divider, Drawer, Text} from 'react-native-paper';
-import {AuthContext} from '../context/AuthContext';
-import {Image, View} from 'react-native';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import React, { useContext, useState } from 'react';
+import { Image, View } from 'react-native';
+import { Divider, Drawer, Text } from 'react-native-paper';
+import { AuthContext } from '../context/AuthContext';
 
 export const InternalMenuStyled = props => {
   const {authState, logOut} = useContext(AuthContext);
@@ -16,7 +15,7 @@ export const InternalMenuStyled = props => {
   const [active, setActive] = useState('');
 
   return (
-    (!authState.isLoggedIn && (
+    authState.isLoggedIn ? (
       <DrawerContentScrollView>
         {/* <Drawer.Section title="Some title"> */}
         <Drawer.Item
@@ -50,7 +49,7 @@ export const InternalMenuStyled = props => {
         <Divider style={{height: 2, marginTop: 20}} />
         {/* </Drawer.Section> */}
       </DrawerContentScrollView>
-    )) || (
+    ) : (
       <DrawerContentScrollView>
         <View
           style={{

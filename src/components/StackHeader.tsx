@@ -1,6 +1,6 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import {Appbar} from 'react-native-paper';
+import { Image, StyleSheet, View } from 'react-native';
+import { Appbar } from 'react-native-paper';
 
 const StackHeader = props => {
   const {navigation, scene} = props;
