@@ -40,6 +40,13 @@ export const InternalMenuStyled = props => {
           onPress={() => props.navigation.navigate('RegisterScreen')}
           style={{height: 40, marginVertical: 10}}
         />
+        <Drawer.Item
+          icon="clipboard-edit-outline"
+          label="TestScreen"
+          active={active === 'TestScreen'}
+          onPress={() => props.navigation.navigate('TestScreen')}
+          style={{height: 40, marginVertical: 10}}
+        />
         <Divider style={{height: 2, marginTop: 20}} />
         {/* </Drawer.Section> */}
       </DrawerContentScrollView>

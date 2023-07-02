@@ -9,10 +9,11 @@ import {Home} from '../routes/Home';
 import {Login} from '../routes/Login';
 import {Register} from '../routes/Register';
 import {Dashboard} from '../routes/Dashboard';
+import {Test} from '../routes/Test';
 
 const Drawer = createDrawerNavigator();
 
-const RoutesList = [Home, Login, Register, Dashboard];
+const RoutesList = [Home, Login, Register, Dashboard, Test];
 const SideMenu = () => {
   return (
     <Drawer.Navigator
