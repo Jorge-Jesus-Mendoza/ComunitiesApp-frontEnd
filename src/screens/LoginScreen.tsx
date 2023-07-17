@@ -1,48 +1,64 @@
-import React, { useContext, useState } from 'react';
-import { Image, ScrollView, View, useWindowDimensions } from 'react-native';
-import { Button, Text, TextInput } from 'react-native-paper';
+import React, {useContext, useState} from 'react';
+import {Image, ScrollView, View, useWindowDimensions} from 'react-native';
+import {Button, Text, TextInput} from 'react-native-paper';
 import communityApi from '../api/communityApi';
-import { AuthContext } from '../context/AuthContext';
-import { initialLoginData, loginItem } from '../interfaces/authInterfaces';
-import { styles } from '../theme/appTheme';
+import {AuthContext} from '../context/AuthContext';
+import {initialLoginData, loginItem} from '../interfaces/authInterfaces';
+import {styles, colors} from '../theme/appTheme';
+import {useFormik} from 'formik';
+import {TextField} from '../components/TextField';
 
-export const LoginScreen = props => {
-  const {width, height} = useWindowDimensions();
+export const LoginScreen = (props: any) => {
+  const {width} = useWindowDimensions();
 
   const {logIn} = useContext(AuthContext);
+  const [Message, setMessage] = useState('');
 
-  const [formValues, setFormValues] = useState(initialLoginData);
+  const {values, setFieldValue, handleSubmit, errors, isSubmitting, resetForm} =
+    useFormik({
+      initialValues: initialLoginData,
 
-  const handleChange = (field: string, value: string | number) => {
-    setFormValues((prevFormValues: loginItem) => {
-      const newFormValues = {
-        ...prevFormValues,
-        [field]: value,
-      };
-      return newFormValues;
-    });
-  };
-
-  const handleSubmit = () => {
-    communityApi
-      .post('/auth/login', formValues)
-      .then(response => {
-        logIn(response.data);
-        setFormValues(initialLoginData);
-        props.navigation.navigate('TobTabNavigator');
-      })
-      .catch(error => {
-        if (error.response) {
-          const {status, data} = error?.response;
-          console.log(
-            '🚀 ~ file: RegisterScreen.tsx:59 ~ SendData ~ status, data :',
-            status,
-            data,
-          );
+      onSubmit(values, formikHelpers) {
+        console.log(values);
+        communityApi
+          .post('/auth/login', values)
+          .then(response => {
+            logIn(response.data);
+            resetForm();
+            props.navigation.navigate('TobTabNavigator');
+          })
+          .catch(error => {
+            if (error.response) {
+              const {status, data} = error?.response;
+              console.log(
+                '🚀 ~ file: RegisterScreen.tsx:59 ~ SendData ~ status, data :',
+                status,
+                data,
+              );
+            }
+            console.error(error);
+          });
+      },
+      validate(values) {
+        const errors: any = {};
+        const paswd =
+          /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
+        if (!Number.isInteger(values.identification_card)) {
+          errors.identification_card = 'Ingrese un número de cédula valido';
         }
-        console.error(error);
-      });
-  };
+        if (values.password !== '') {
+          if (!values.password.match(paswd)) {
+            errors.password = 'Ingrese una contraseña valida';
+          }
+        }
+        return errors;
+      },
+    });
+
+  console.log(Array.isArray(''));
+
+  const isFormValid = errors?.identification_card || errors?.password;
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -65,34 +81,35 @@ export const LoginScreen = props => {
           />
           <View style={{width: width * 0.8}}>
             <Text
-              style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+              style={{
+                fontWeight: 'bold',
+                fontSize: 20,
+                textAlign: 'center',
+              }}>
               Iniciar Sesión
             </Text>
-            <TextInput
+
+            <TextField
               label="Cédula"
-              selectionColor="#82d5ff"
-              mode="flat"
-              value={formValues.identification_card}
-              style={{backgroundColor: 'transparent'}}
-              onChangeText={value =>
-                handleChange('identification_card', Number(value))
+              value={values.identification_card}
+              onChangeText={(value: any) =>
+                setFieldValue('identification_card', Number(value))
               }
+              error={errors?.identification_card}
             />
-            <TextInput
+
+            <TextField
               label="Clave"
-              selectionColor="#82d5ff"
-              mode="flat"
-              activeOutlineColor="red"
+              value={values.password}
               secureTextEntry
-              value={formValues.password}
-              style={{backgroundColor: 'transparent'}}
-              onChangeText={value => handleChange('password', value)}
+              onChangeText={(value: any) => setFieldValue('password', value)}
+              error={errors?.password}
             />
             <Button
-              buttonColor="red"
+              buttonColor={!isFormValid ? 'red' : 'grey'}
               textColor="white"
               style={{marginVertical: 10}}
-              onPress={() => handleSubmit()}>
+              onPress={!isFormValid ? () => handleSubmit() : () => {}}>
               Continuar
             </Button>
           </View>

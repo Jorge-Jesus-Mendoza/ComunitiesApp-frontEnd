@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export const colors = {
   primary: '#e2191a',
@@ -85,7 +85,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-
   // Drawer Styles
   globalMargin: {
     marginHorizontal: 20,
@@ -123,6 +122,5 @@ export const styles = StyleSheet.create({
   buttonMenu: {
     marginVertical: 10,
   },
-  textMenu: { fontSize: 25 },
-
+  textMenu: {fontSize: 25},
 });

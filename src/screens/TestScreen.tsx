@@ -1,16 +1,14 @@
 import React, {useContext, useState} from 'react';
 import {Button, List, Text, TextInput} from 'react-native-paper';
-import {ScrollView, View, Image, useWindowDimensions} from 'react-native';
+import {ScrollView, View, useWindowDimensions, FlatList} from 'react-native';
 import {styles, colors} from '../theme/appTheme';
-import customFetch from '../components/customFetch';
-import {AuthContext} from '../context/AuthContext';
-import {initialLoginData, loginItem} from '../interfaces/authInterfaces';
 import {DataTable} from 'react-native-paper';
 import ListItems from '../components/ListItems';
 
 export const TestScreen = props => {
   const [page, setPage] = React.useState<number>(0);
   const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
+  const {width} = useWindowDimensions();
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0],
   );
@@ -20,7 +18,7 @@ export const TestScreen = props => {
       key: 1,
       name: 'Cupcake',
       calories: 356,
-      fat: {test: 5},
+      fat: 262,
     },
     {
       key: 2,
@@ -69,28 +67,17 @@ export const TestScreen = props => {
   const collums = [
     {
       type: 'number',
-      headerName: 'ID',
+      headerName: 'Dessert',
     },
     {
       type: 'number',
-      headerName: 'Nombre',
+      headerName: 'Calories',
     },
     {
       type: 'number',
-      headerName: 'Calorías',
-    },
-    {
-      type: 'number',
-      headerName: 'Grasas',
+      headerName: 'Fat',
     },
   ];
-
-  Object.entries(items[0]).forEach(([key, value], index) => {
-    console.log(
-      '🚀 ~ file: TestScreen.tsx:89 ~ Object.entries ~ value:',
-      value,
-    );
-  });
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, items.length);
@@ -98,6 +85,34 @@ export const TestScreen = props => {
   React.useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
+
+  const _renderItem = ({item}) => (
+    <DataTable.Row>
+      <DataTable.Cell
+        style={{
+          justifyContent: 'center',
+          width: (width * 0.8) / collums.length,
+        }}>
+        {item.name}
+      </DataTable.Cell>
+      <DataTable.Cell
+        style={{
+          alignContent: 'center',
+          justifyContent: 'center',
+          width: (width * 0.8) / collums.length,
+        }}>
+        {item.calories}
+      </DataTable.Cell>
+      <DataTable.Cell
+        style={{
+          justifyContent: 'center',
+          width: (width * 0.8) / collums.length,
+        }}>
+        {item.fat}
+      </DataTable.Cell>
+    </DataTable.Row>
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -109,46 +124,9 @@ export const TestScreen = props => {
           numberOfItemsPerPageList={numberOfItemsPerPageList}
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={onItemsPerPageChange}
+          _renderItem={_renderItem}
+          width={width}
         />
-        {/* <View
-          style={{
-            backgroundColor: 'white',
-            flex: 1,
-            padding: 20,
-            alignItems: 'center',
-            marginVertical: 15,
-            marginHorizontal: 10,
-            borderRadius: 20,
-          }}>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Dessert</DataTable.Title>
-              <DataTable.Title numeric>Calories</DataTable.Title>
-              <DataTable.Title numeric>Fat</DataTable.Title>
-              <DataTable.Title numeric>Calories</DataTable.Title>
-            </DataTable.Header>
-
-            {items.slice(from, to).map(item => (
-              <DataTable.Row key={item.key}>
-                <DataTable.Cell>{item.name}</DataTable.Cell>
-                <DataTable.Cell numeric>{item.calories}</DataTable.Cell>
-                <DataTable.Cell numeric>{item.calories}</DataTable.Cell>
-              </DataTable.Row>
-            ))}
-
-            <DataTable.Pagination
-              page={page}
-              numberOfPages={Math.ceil(items.length / itemsPerPage)}
-              onPageChange={page => setPage(page)}
-              label={`${from + 1}-${to} of ${items.length}`}
-              numberOfItemsPerPageList={numberOfItemsPerPageList}
-              numberOfItemsPerPage={itemsPerPage}
-              onItemsPerPageChange={onItemsPerPageChange}
-              showFastPaginationControls
-              selectPageDropdownLabel={'Rows per page'}
-            />
-          </DataTable>
-        </View> */}
       </ScrollView>
     </View>
   );

@@ -22,11 +22,10 @@ const SideMenu = () => {
         ),
       }}
       drawerContent={props => <InternalMenu {...props} />}>
-      <Drawer.Screen name={'TobTabNavigator'} component={TopTabNavigator} />
-
       {RoutesList.map(route => (
         <Drawer.Screen name={route.name} component={route.component} />
       ))}
+      <Drawer.Screen name={'TobTabNavigator'} component={TopTabNavigator} />
     </Drawer.Navigator>
   );
 };
