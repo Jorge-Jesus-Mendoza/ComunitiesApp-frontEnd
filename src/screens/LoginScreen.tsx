@@ -1,12 +1,16 @@
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import React, { useContext, useState } from 'react';
 import { Image, ScrollView, View, useWindowDimensions } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import communityApi from '../api/communityApi';
 import { AuthContext } from '../context/AuthContext';
 import { initialLoginData, loginItem } from '../interfaces/authInterfaces';
+import { RootDrawerParams } from '../navigator/DrawerNavigator';
 import { styles } from '../theme/appTheme';
 
-export const LoginScreen = props => {
+interface Props extends DrawerScreenProps<RootDrawerParams, "LoginScreen"> { }
+
+export const LoginScreen = ({ navigation }: Props) => {
   const {width, height} = useWindowDimensions();
 
   const {logIn} = useContext(AuthContext);
@@ -23,26 +27,27 @@ export const LoginScreen = props => {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = () =>
     communityApi
       .post('/auth/login', formValues)
       .then(response => {
+
         logIn(response.data);
         setFormValues(initialLoginData);
-        props.navigation.navigate('TobTabNavigator');
+        navigation.navigate('TopTabNavigator');
       })
       .catch(error => {
-        if (error.response) {
+
           const {status, data} = error?.response;
           console.log(
             '🚀 ~ file: RegisterScreen.tsx:59 ~ SendData ~ status, data :',
             status,
             data,
           );
-        }
+
         console.error(error);
       });
-  };
+
   return (
     <View style={styles.container}>
       <ScrollView>

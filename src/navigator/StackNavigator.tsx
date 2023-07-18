@@ -1,33 +1,33 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import {DashboardScreen} from '../screens/HomeScreen';
-import StackHeader from '../components/StackHeader';
-import {LoginScreen} from '../screens/LoginScreen';
-import {Dashboard} from '../routes/Home';
-import {Login} from '../routes/Login';
+import { DashboardScreen } from '../screens/DashboardScreen';
+import FamilyHomeScreen from '../screens/FamilyHomeScreen';
+import { RootTopTabParams } from './TopTabNavigator';
 
-// export type RootStackParams = {
-//   DashboardScreen: undefined;
-//   Pagina2Screen: undefined;
-//   Pagina3Screen: undefined;
-//   PersonaScreen: {id: number; nombre: string};
-// };
+export type RootStackParams = {
+  DashboardScreen: undefined;
+  FamilyHomeScreen: undefined;
+};
 
-// const Stack = createStackNavigator<RootStackParams>();
+type StackScreenProps = {
+  route: RouteProp<RootTopTabParams>;
+  navigation: StackNavigationProp<RootStackParams>;
+};
+const Stack = createStackNavigator<RootStackParams>();
 
-const Stack = createStackNavigator();
-
-const RoutesList = [Dashboard, Login];
-
-const StackNavigator = () => {
-  return (
+const StackNavigator = ({ route, navigation, ...props }: StackScreenProps) => {
+  const { initialRouteName } = route.params ?? { initialRouteName: 'DashboardScreen' };
+  // if (initialRouteName) navigation.navigate(initialRouteName as keyof RootStackParams);
+  console.log('initialRouteName', initialRouteName);
+  return (initialRouteName &&
     <Stack.Navigator
+      initialRouteName={initialRouteName as keyof RootStackParams}
       screenOptions={{
-        headerShown: false,
+        // headerShown: false,
       }}>
-      {RoutesList.map(route => (
-        <Stack.Screen name={route.name} component={route.component} />
-      ))}
+      <Stack.Screen name="FamilyHomeScreen" component={FamilyHomeScreen} />
+      <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
     </Stack.Navigator>
   );
 };

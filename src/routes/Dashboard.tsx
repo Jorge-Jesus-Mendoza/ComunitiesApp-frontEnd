@@ -1,9 +1,8 @@
-import {useContext} from 'react';
-import {LoginScreen} from '../screens/LoginScreen';
-import {AuthContext} from '../context/AuthContext';
-import {DashboardScreen} from '../screens/DashboardScreen';
+import StackNavigator, { RootStackParams } from '../navigator/StackNavigator';
 
 export const Dashboard = {
-  name: 'DashboardScreen',
-  component: DashboardScreen,
+  name: 'DashboardScreen' as keyof RootStackParams,
+  component: StackNavigator,
+  options: { title: 'Inicio' },
+  initialParams: { initialRouteName: 'DashboardScreen' as keyof RootStackParams },
 };
