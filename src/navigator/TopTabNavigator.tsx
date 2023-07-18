@@ -2,21 +2,30 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Dashboard } from "../routes";
+import { Route } from "../interfaces/routesInterfaces";
+import { Dashboard, Family } from "../routes";
 import { colors } from "../theme/appTheme";
 
-const Tab = createMaterialTopTabNavigator();
+export type RootTopTabParams = {
+  DashboardScreen: undefined;
+  FamilyScreen: { initialRouteName: string; };
+  WalletScreen: undefined;
+  ReportScreen: undefined;
+};
+const Tab = createMaterialTopTabNavigator<RootTopTabParams>();
+const RoutesList: Route[] = [Dashboard, Family];
 
 export default function TopTabNavigator() {
   const { top: paddingTop } = useSafeAreaInsets();
   return (
     <Tab.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="DashboardScreen"
       style={{ paddingTop }}
       sceneContainerStyle={{
         backgroundColor: "white",
       }}
       screenOptions={({ route }) => ({
+        tabBarScrollEnabled: true,
         tabBarActiveTintColor: 'blue',
         tabBarPressColor: 'rgba(226, 25, 26, 0.2)',
         tabBarShowIcon: true,
@@ -29,20 +38,27 @@ export default function TopTabNavigator() {
           backgroundColor: colors.primary,
         },
         tabBarLabelStyle: {
-          fontSize: 0,
+          marginTop: 10,
+          fontSize: 15,
+          fontWeight: 'bold',
+          textTransform: 'capitalize',
+          color: 'white',
         },
         // tabBarItemStyle: { width: 100 },
         tabBarIcon: ({ color, focused }) => {
           let iconName: string = "";
           switch (route.name) {
-            case "Dashboard":
+            case "DashboardScreen":
               iconName = "home";
               break;
-            case "SecondScreen":
+            case "FamilyScreen":
               iconName = "people";
               break;
-            case "ThirdScreen":
+            case "WalletScreen":
               iconName = "wallet";
+              break;
+            case "ReportScreen":
+              iconName = "document-text";
               break;
             default:
               iconName = "ban-outline";
@@ -73,20 +89,28 @@ export default function TopTabNavigator() {
         },
       })}
     >
+      {
+        RoutesList.map(({ name, component, options, initialParams }, index) =>
+          <Tab.Screen
+            key={name + index}
+            name={name as keyof RootTopTabParams}
+            options={options}
+            component={component}
+            initialParams={initialParams as any}
+          />
+
+        )
+      }
       <Tab.Screen
-        name="Dashboard"
-        component={() => <Dashboard.component />}
-      />
-      <Tab.Screen
-        name="SecondScreen"
-        options={{ title: "Contacts" }}
+        name="WalletScreen"
+        options={{ title: "Billetera" }}
         component={() => <View>
-          <Text>second screen</Text>
+          <Text>third Screen</Text>
         </View>}
       />
       <Tab.Screen
-        name="ThirdScreen"
-        options={{ title: "Albums" }}
+        name="ReportScreen"
+        options={{ title: "Reportes" }}
         component={() => <View>
           <Text>third Screen</Text>
         </View>}
