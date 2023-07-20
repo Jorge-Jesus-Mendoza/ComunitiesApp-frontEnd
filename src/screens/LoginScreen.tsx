@@ -1,14 +1,17 @@
-import React, {useContext, useState} from 'react';
-import {Image, ScrollView, View, useWindowDimensions} from 'react-native';
-import {Button, Text, TextInput} from 'react-native-paper';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { useFormik } from 'formik';
+import React, { useContext, useState } from 'react';
+import { Image, ScrollView, View, useWindowDimensions } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 import communityApi from '../api/communityApi';
-import {AuthContext} from '../context/AuthContext';
-import {initialLoginData, loginItem} from '../interfaces/authInterfaces';
-import {styles, colors} from '../theme/appTheme';
-import {useFormik} from 'formik';
-import {TextField} from '../components/TextField';
+import { TextField } from '../components/TextField';
+import { AuthContext } from '../context/AuthContext';
+import { initialLoginData } from '../interfaces/authInterfaces';
+import { RootDrawerParams } from '../navigator/DrawerNavigator';
+import { styles } from '../theme/appTheme';
+interface Props extends DrawerScreenProps<RootDrawerParams, "LoginScreen"> { }
 
-export const LoginScreen = (props: any) => {
+export const LoginScreen = ({ navigation }: Props) => {
   const {width} = useWindowDimensions();
 
   const {logIn} = useContext(AuthContext);
@@ -25,7 +28,7 @@ export const LoginScreen = (props: any) => {
           .then(response => {
             logIn(response.data);
             resetForm();
-            props.navigation.navigate('TobTabNavigator');
+            navigation.navigate('TopTabNavigator');
           })
           .catch(error => {
             if (error.response) {
@@ -41,13 +44,13 @@ export const LoginScreen = (props: any) => {
       },
       validate(values) {
         const errors: any = {};
-        const paswd =
+        const pass =
           /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
         if (!Number.isInteger(values.identification_card)) {
           errors.identification_card = 'Ingrese un número de cédula valido';
         }
         if (values.password !== '') {
-          if (!values.password.match(paswd)) {
+          if (!values.password.match(pass)) {
             errors.password = 'Ingrese una contraseña valida';
           }
         }

@@ -4,13 +4,10 @@ import {
   DrawerNavigationProp,
   createDrawerNavigator,
 } from '@react-navigation/drawer';
-import {InternalMenuStyled} from '../components/InternalMenuStyled';
+import { InternalMenuStyled } from '../components/InternalMenuStyled';
 import StackHeader from '../components/StackHeader';
-import {Route} from '../interfaces/routesInterfaces';
-import {Home} from '../routes/Home';
-import {Login} from '../routes/Login';
-import {Register} from '../routes/Register';
-import TopTabNavigator from './TopTabNavigator';
+import { Route } from '../interfaces/routesInterfaces';
+import { Home, Login, Register, TopTabNavigatorRoute } from '../routes';
 
 export type RootDrawerParams = {
   HomeScreen: undefined;
@@ -20,7 +17,7 @@ export type RootDrawerParams = {
 };
 const Drawer = createDrawerNavigator<RootDrawerParams>();
 
-const RoutesList: Route[] = [Home, Login, Register];
+const RoutesList: Route[] = [Home, Login, Register, TopTabNavigatorRoute];
 const SideMenu = () => (
   <Drawer.Navigator
     initialRouteName="HomeScreen"
@@ -30,8 +27,6 @@ const SideMenu = () => (
       ),
     }}
     drawerContent={props => <InternalMenu {...props} />}>
-    <Drawer.Screen name="TopTabNavigator" component={TopTabNavigator} />
-
     {RoutesList.map(route => (
       <Drawer.Screen
         name={route.name as keyof RootDrawerParams}

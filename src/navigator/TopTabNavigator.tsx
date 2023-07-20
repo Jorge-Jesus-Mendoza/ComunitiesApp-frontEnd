@@ -8,7 +8,7 @@ import { colors } from "../theme/appTheme";
 
 export type RootTopTabParams = {
   DashboardScreen: undefined;
-  FamilyScreen: { initialRouteName: string; };
+  FamilyScreen: undefined;
   WalletScreen: undefined;
   ReportScreen: undefined;
 };

@@ -1,5 +1,7 @@
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { useFormik } from 'formik';
 import moment from 'moment';
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -18,16 +20,15 @@ import {
 } from 'react-native-paper';
 import communityApi from '../api/communityApi';
 import Alert from '../components/Alert';
-import {AuthContext} from '../context/AuthContext/index';
+import { TextField } from '../components/TextField';
+import { AuthContext } from '../context/AuthContext/index';
 import {
-  initialRegisterData,
-  registerUserItem,
+  initialRegisterData
 } from '../interfaces/authInterfaces';
-import {styles} from '../theme/appTheme';
-import {useFormik} from 'formik';
-import {TextField} from '../components/TextField';
-
-export const RegisterScreen = props => {
+import { RootDrawerParams } from '../navigator/DrawerNavigator';
+import { styles } from '../theme/appTheme';
+interface Props extends DrawerScreenProps<RootDrawerParams, "RegisterScreen"> { }
+export const RegisterScreen = ({ navigation }: Props) => {
   const {width, height} = useWindowDimensions();
   const [OpenSelect, setOpenSelect] = useState(false);
   const [Open, setOpen] = useState(false);
@@ -50,7 +51,7 @@ export const RegisterScreen = props => {
               sigIn(response.data);
               resetForm();
               setRepeatPassword('');
-              props.navigation.navigate('TobTabNavigator');
+              navigation.navigate('TopTabNavigator');
             })
             .catch(error => {
               if (error.response) {
@@ -81,7 +82,7 @@ export const RegisterScreen = props => {
 
         const validateEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-        const paswd =
+        const pass =
           /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
 
         if (!Number.isInteger(values.identification_card)) {
@@ -90,7 +91,7 @@ export const RegisterScreen = props => {
         if (!values.email.match(validateEmail)) {
           errors.email = 'Ingrese un correo valido';
         }
-        if (!values.password.match(paswd)) {
+        if (!values.password.match(pass)) {
           errors.password = 'Ingrese una contraseña valida';
         }
         return errors;
@@ -112,8 +113,9 @@ export const RegisterScreen = props => {
   };
 
   const isFormValid =
-    errors?.identification_card || errors?.password || errors?.email;
+    Object.keys(errors).length === 0;
 
+  console.log(isFormValid, '\nerrors', errors)
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -240,12 +242,12 @@ export const RegisterScreen = props => {
               onChangeText={(value: any) => setRepeatPassword(value)}
               // error={errors?.password}
             />
-
             <Button
-              buttonColor={!isFormValid ? 'red' : 'grey'}
+              buttonColor={isFormValid ? 'red' : 'grey'}
               textColor="white"
               style={{marginVertical: 10}}
-              onPress={!isFormValid ? () => handleSubmit() : () => {}}>
+              disabled={!isFormValid}
+              onPress={handleSubmit}>
               Continuar
             </Button>
 
