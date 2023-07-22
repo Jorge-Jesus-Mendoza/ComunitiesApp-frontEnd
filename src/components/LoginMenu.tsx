@@ -1,20 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  useWindowDimensions,
-  ImageBackground,
-  ScrollView,
-} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {Button, IconButton} from 'react-native-paper';
+import {DrawerScreenProps} from '@react-navigation/drawer';
+import {RootDrawerParams} from '../navigator/DrawerNavigator';
 import {styles} from '../theme/appTheme';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
-export const LoginMenu = props => {
-  const {width = {}} = props;
+interface navigationProps
+  extends DrawerScreenProps<RootDrawerParams, 'HomeScreen'> {}
+type Props = {
+  navigation: navigationProps;
+  width: number;
+};
+export const LoginMenu = (props: Props) => {
+  const {width = 0} = props;
+  const navigator = props.navigation.navigation;
 
   const containerStyles =
     width <= 600
@@ -23,7 +23,10 @@ export const LoginMenu = props => {
 
   return (
     <View style={{...containerStyles, width: width * 0.9}}>
-      <View
+      <TouchableOpacity
+        disabled={width >= 600}
+        activeOpacity={1}
+        onPress={() => navigator.navigate('LoginScreen')}
         style={{
           ...styles.loginMenu,
           backgroundColor: 'red',
@@ -35,7 +38,7 @@ export const LoginMenu = props => {
           borderBottomStartRadius: width >= 600 ? 20 : 0,
         }}>
         <Text style={{...styles.loginMenuTitle, color: 'white'}}>
-          USUARIO / CONTRASEÑA
+          INICIAR SESIÓN
         </Text>
         {width >= 600 && (
           <>
@@ -44,28 +47,33 @@ export const LoginMenu = props => {
                 ...styles.loginMenuTextContent,
                 color: 'white',
               }}>
-              Accede con tu cédula y contraseña. No coloques la contraseña si la
-              imagen de seguridad no es correcta.
+              Accede con tu cédula y contraseña.
             </Text>
 
             <Button
               mode="contained"
               style={styles.showMoreButton}
               textColor="red"
-              onPress={() => console.log('Pressed')}>
+              onPress={() => navigator.navigate('LoginScreen')}>
               <Text>ENTRAR</Text>
             </Button>
           </>
         )}
         {width <= 600 && <IconButton icon="play-circle" iconColor="white" />}
-      </View>
-      <View
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={width >= 600}
+        activeOpacity={1}
+        onPress={() => navigator.navigate('ResetPasswordScreen')}
         style={{
           ...styles.loginMenu,
           backgroundColor: 'white',
           width: width >= 600 ? (width * 0.9) / 3 : 'auto',
           flexDirection: width <= 600 ? 'row' : 'column',
           justifyContent: width <= 600 ? 'space-between' : 'space-around',
+          borderTopEndRadius: width >= 600 ? 20 : 0,
+          borderBottomStartRadius: width <= 600 ? 20 : 0,
+          borderBottomEndRadius: 20,
         }}>
         <Text style={{...styles.loginMenuTitle, color: '#074475'}}>
           RECUPERAR CONTRASEÑA
@@ -74,55 +82,21 @@ export const LoginMenu = props => {
         {width >= 600 && (
           <>
             <Text style={styles.loginMenuTextContent}>
-              Si olvidaste la contraseña puedes recuperarla haciendo uso de
-              algún dato de contacto aportado durante el registro o actualizado
-              en el perfil.
+              Si olvidaste tu contraseña puedes solicitar su reinicio a uno de
+              los administradores
             </Text>
 
             <Button
               mode="contained"
               // buttonColor="blue"
               textColor="white"
-              onPress={() => console.log('Pressed')}>
+              onPress={() => navigator.navigate('ResetPasswordScreen')}>
               <Text>RECUPERAR</Text>
             </Button>
           </>
         )}
         {width <= 600 && <IconButton icon="play-circle" />}
-      </View>
-      <View
-        style={{
-          ...styles.loginMenu,
-          backgroundColor: 'white',
-          width: width >= 600 ? (width * 0.9) / 3 : 'auto',
-          borderTopEndRadius: width >= 600 ? 20 : 0,
-          borderBottomStartRadius: width <= 600 ? 20 : 0,
-          borderBottomEndRadius: 20,
-          flexDirection: width <= 600 ? 'row' : 'column',
-          justifyContent: width <= 600 ? 'space-between' : 'space-around',
-        }}>
-        <Text style={{...styles.loginMenuTitle, color: '#074475'}}>
-          RECUPERAR ACCESO
-        </Text>
-
-        {width >= 600 && (
-          <>
-            <Text style={styles.loginMenuTextContent}>
-              Si no te es posible acceder al sistema, ni recuperar la
-              contraseña, puedes recuperar tu usuario con un teléfono celular
-              que sea posible certificar.
-            </Text>
-            <Button
-              mode="contained"
-              // buttonColor="blue"
-              textColor="white"
-              onPress={() => console.log('Pressed')}>
-              <Text>RECUPERAR</Text>
-            </Button>
-          </>
-        )}
-        {width <= 600 && <IconButton icon="play-circle" />}
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

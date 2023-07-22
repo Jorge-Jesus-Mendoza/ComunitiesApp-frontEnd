@@ -83,6 +83,7 @@ export const styles = StyleSheet.create({
   loginMenuTextContent: {
     textAlign: 'left',
     fontWeight: 'bold',
+    padding: 10,
   },
 
   // Drawer Styles

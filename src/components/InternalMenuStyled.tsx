@@ -137,10 +137,6 @@ export const InternalMenuStyled = ({
     );
   }
 
-  // console.log("TopTabNavigatorScreenName", TopTabNavigatorScreenName);
-
-  // const activeRoute = routes.routeNames;
-  // console.log("activeRoute", activeRoute);
   return (
     <DrawerContentScrollView>
       {(!authState.isLoggedIn && (

@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {DrawerScreenProps} from '@react-navigation/drawer';
 import {ScrollView, View, useWindowDimensions} from 'react-native';
 import {TestDataCarousel, TestDataNews} from '../api/TestData';
 
@@ -9,8 +10,10 @@ import {LoginMenu} from '../components/LoginMenu';
 import {NewsCard} from '../components/NewsCard';
 import {StatsCard} from '../components/StatsCard';
 import {StyledCarousel} from '../components/StyledCarousel';
+import {RootDrawerParams} from '../navigator/DrawerNavigator';
 
-export const HomeScreen = () => {
+interface Props extends DrawerScreenProps<RootDrawerParams, 'HomeScreen'> {}
+export const HomeScreen = (props: Props) => {
   const {width, height} = useWindowDimensions();
 
   const [cardData, setCardData] = useState({
@@ -35,7 +38,7 @@ export const HomeScreen = () => {
             onSnapToItem={onSnapToItem}
           />
         </View>
-        <LoginMenu width={width} />
+        <LoginMenu navigation={props} width={width} />
 
         {TestDataNews.map(news => (
           <NewsCard title={news?.title} uri={news.uri} content={news.content} />
