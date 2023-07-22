@@ -1,36 +1,51 @@
-import React from 'react';
-import {Text, TextInput} from 'react-native-paper';
+import { StyleProp, TextStyle, View } from 'react-native';
+import { Text, TextInput, TextInputProps } from 'react-native-paper';
+import { colors } from '../theme/appTheme';
 
-export const TextField = (props: any) => {
-  const {
-    value,
-    error,
-    onChangeText,
-    field,
-    label,
-    secureTextEntry = false,
-  } = props;
+interface ExtendedProps extends TextInputProps {
+  // any other props that come into the component
+  errorTextStyles?: StyleProp<TextStyle>;
+  containerStyle?: StyleProp<TextStyle>;
+  errorTitle?: string;
+}
+export const TextField = ({
+  error,
+  keyboardType = 'default',
+  style = {},
+  errorTextStyles = {},
+  containerStyle = {},
+  errorTitle,
+  ...props
+}: ExtendedProps) => {
   return (
-    <>
+    <View style={{
+      width: '100%',
+      ...containerStyle as Object,
+    }}>
       <TextInput
-        label={label}
-        selectionColor="#82d5ff"
+        selectionColor={colors.primary}
         mode="flat"
-        activeOutlineColor="red"
-        secureTextEntry={secureTextEntry}
-        value={value}
-        style={{backgroundColor: 'transparent'}}
-        onChangeText={onChangeText}
-        error={error ? true : false}
+        keyboardType={keyboardType}
+        activeOutlineColor={colors.primary}
+        underlineColor={colors.primaryDark}
+        activeUnderlineColor={colors.primary}
+        style={{
+          backgroundColor: 'transparent',
+          width: '100%',
+          ...style as Object,
+        }}
+        error={error}
+        {...props}
       />
       {error && (
         <Text
           style={{
-            color: '#dc3545',
+            color: colors.error,
+            ...errorTextStyles as Object,
           }}>
-          {error}
+          {errorTitle || 'Este campo es requerido'}
         </Text>
       )}
-    </>
+    </View>
   );
 };

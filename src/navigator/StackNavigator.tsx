@@ -1,8 +1,8 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { DashboardScreen } from '../screens/DashboardScreen';
-import FamilyHomeScreen from '../screens/FamilyHomeScreen';
+import { Route } from '../interfaces/routesInterfaces';
+import { DashboardHome, FamilyHome } from '../routes';
 import { RootTopTabParams } from './TopTabNavigator';
 
 export type RootStackParams = {
@@ -16,6 +16,8 @@ type StackScreenProps = {
 };
 const Stack = createStackNavigator<RootStackParams>();
 
+const RoutesList: Route[] = [DashboardHome, FamilyHome];
+
 const StackNavigator = ({ route, navigation, ...props }: StackScreenProps) => {
   const { initialRouteName } = route.params ?? { initialRouteName: 'DashboardScreen' };
   // if (initialRouteName) navigation.navigate(initialRouteName as keyof RootStackParams);
@@ -24,10 +26,21 @@ const StackNavigator = ({ route, navigation, ...props }: StackScreenProps) => {
     <Stack.Navigator
       initialRouteName={initialRouteName as keyof RootStackParams}
       screenOptions={{
-        // headerShown: false,
+        headerShown: false,
+        cardStyle: {
+          backgroundColor: "white",
+        }
       }}>
-      <Stack.Screen name="FamilyHomeScreen" component={FamilyHomeScreen} />
-      <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
+      {RoutesList.map(({ name, component, options, initialParams }, index) => (
+        <Stack.Screen
+          key={`${index + 1}.-${name}`}
+          name={name as keyof RootStackParams}
+          component={component}
+          options={options}
+          initialParams={initialParams as any}
+        />
+      ))
+      }
     </Stack.Navigator>
   );
 };
