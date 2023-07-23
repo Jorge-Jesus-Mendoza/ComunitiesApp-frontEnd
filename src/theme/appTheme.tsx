@@ -1,7 +1,13 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const colors = {
   primary: '#e2191a',
+  primaryDark: '#b51617',
+  primaryLight: '#e2191a',
+  secondary: '#e2191a',
+  secondaryDark: '#b51617',
+  secondaryLight: '#e2191a',
+  error: '#dc3545',
 };
 
 export const styles = StyleSheet.create({

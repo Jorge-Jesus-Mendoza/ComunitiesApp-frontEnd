@@ -20,21 +20,25 @@ const ListItems = (props: any) => {
   const to = Math.min((page + 1) * itemsPerPage, items.length);
 
   return (
-    <ScrollView horizontal>
-      <View
-        style={{
-          backgroundColor: 'white',
-          flex: 1,
-          padding: 20,
-          alignItems: 'center',
-          marginVertical: 15,
-          marginHorizontal: 10,
-          borderRadius: 20,
-        }}>
+    <View
+      style={{
+        backgroundColor: 'white',
+        flex: 1,
+        padding: 20,
+        alignItems: 'center',
+        marginVertical: 15,
+        marginHorizontal: 10,
+        borderRadius: 20,
+        width: width * 0.95,
+      }}>
+      <ScrollView horizontal>
         <DataTable>
           <DataTable.Header style={{justifyContent: 'space-between'}}>
-            {collums.map(element => (
+            {collums.map((element: any) => (
               <DataTable.Title
+                textStyle={{
+                  fontWeight: 'bold',
+                }}
                 style={{
                   justifyContent: 'center',
                   width: (width * 0.8) / collums.length,
@@ -55,11 +59,14 @@ const ListItems = (props: any) => {
             numberOfItemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}
             showFastPaginationControls
-            selectPageDropdownLabel={'Rows per page'}
+            style={{
+              justifyContent: 'flex-start',
+            }}
+            // selectPageDropdownLabel={'Rows per page'}
           />
         </DataTable>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

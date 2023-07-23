@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Route} from '../interfaces/routesInterfaces';
-import {Dashboard, Family} from '../routes';
+import {Dashboard, Family, Programs} from '../routes';
 import {colors} from '../theme/appTheme';
 
 export type RootTopTabParams = {
@@ -13,7 +13,7 @@ export type RootTopTabParams = {
   ReportScreen: undefined;
 };
 const Tab = createMaterialTopTabNavigator<RootTopTabParams>();
-const RoutesList: Route[] = [Dashboard, Family];
+const RoutesList: Route[] = [Dashboard, Family, Programs];
 
 export default function TopTabNavigator() {
   const {top: paddingTop} = useSafeAreaInsets();
@@ -99,15 +99,6 @@ export default function TopTabNavigator() {
           initialParams={initialParams as any}
         />
       ))}
-      <Tab.Screen
-        name="ProgramsScreen"
-        options={{title: 'Programas'}}
-        component={() => (
-          <View>
-            <Text>third Screen</Text>
-          </View>
-        )}
-      />
       <Tab.Screen
         name="ReportScreen"
         options={{title: 'Reportes'}}

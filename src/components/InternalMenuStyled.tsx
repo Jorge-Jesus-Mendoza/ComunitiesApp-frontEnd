@@ -2,10 +2,10 @@ import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import React, {useContext, useState} from 'react';
-import {Image, Text, View} from 'react-native';
-import {Divider, Drawer} from 'react-native-paper';
-import {AuthContext} from '../context/AuthContext';
+import React, { useContext, useState } from 'react';
+import { Image, Text, View } from 'react-native';
+import { Divider, Drawer } from 'react-native-paper';
+import { AuthContext } from '../context/AuthContext';
 
 export const InternalMenuStyled = ({
   navigation,
@@ -14,7 +14,7 @@ export const InternalMenuStyled = ({
 }: DrawerContentComponentProps) => {
   const {authState, logOut} = useContext(AuthContext);
   // const routeName = useNavigationState(state => state.routes[state.index].name);
-  console.log(JSON.stringify(state, null, 4));
+  // console.log(JSON.stringify(state, null, 4));
   const [active, setActive] = useState('');
 
   function LoggedInMenu() {
@@ -23,7 +23,7 @@ export const InternalMenuStyled = ({
     const TopTabNavigatorScreenIndex: number = routes[0].state?.index ?? -1;
     const TopTabNavigatorScreenName =
       routes[0].state?.routeNames?.[TopTabNavigatorScreenIndex];
-    console.log('TopTabNavigatorScreenName', TopTabNavigatorScreenName);
+    // console.log('TopTabNavigatorScreenName', TopTabNavigatorScreenName);
     const handleLogOut = () => {
       logOut();
       navigation.navigate('HomeScreen');

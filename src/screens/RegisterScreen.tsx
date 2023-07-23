@@ -101,6 +101,7 @@ export const RegisterScreen = ({ navigation }: Props) => {
   const sexList = [
     {value: 'H', label: 'Hombre'},
     {value: 'M', label: 'Mujer'},
+    { value: null, label: '-- Seleccione su sexo --' },
   ];
 
   const hideDatePicker = () => {
@@ -146,13 +147,15 @@ export const RegisterScreen = ({ navigation }: Props) => {
               label="Nombre"
               value={values.name}
               onChangeText={(value: any) => setFieldValue('name', value)}
-              error={errors?.name}
+              error={Boolean(errors?.name)}
+              errorTitle={errors?.name}
             />
             <TextField
               label="Apellido"
               value={values.last_name}
               onChangeText={(value: any) => setFieldValue('last_name', value)}
-              error={errors?.last_name}
+              error={Boolean(errors?.last_name)}
+              errorTitle={errors?.last_name}
             />
 
             <TextField
@@ -161,7 +164,8 @@ export const RegisterScreen = ({ navigation }: Props) => {
               onChangeText={(value: any) =>
                 setFieldValue('identification_card', Number(value))
               }
-              error={errors?.identification_card}
+              error={Boolean(errors?.identification_card)}
+              errorTitle={errors?.identification_card}
             />
 
             <TouchableOpacity onPress={() => setOpen(true)}>
@@ -191,14 +195,16 @@ export const RegisterScreen = ({ navigation }: Props) => {
               label="Correo"
               value={values.email}
               onChangeText={(value: any) => setFieldValue('email', value)}
-              error={errors?.email}
+              error={Boolean(errors?.email)}
+              errorTitle={errors?.email}
             />
 
             <TextField
               label="N° de Teléfono"
               value={values.telephone}
               onChangeText={(value: any) => setFieldValue('telephone', value)}
-              error={errors?.telephone}
+              error={Boolean(errors?.telephone)}
+              errorTitle={errors?.telephone}
             />
 
             <View>
@@ -232,7 +238,8 @@ export const RegisterScreen = ({ navigation }: Props) => {
               value={values.password}
               secureTextEntry
               onChangeText={(value: any) => setFieldValue('password', value)}
-              error={errors?.password}
+              error={Boolean(errors?.password)}
+              errorTitle={errors?.password}
             />
 
             <TextField
@@ -240,7 +247,7 @@ export const RegisterScreen = ({ navigation }: Props) => {
               value={repeatPassword}
               secureTextEntry
               onChangeText={(value: any) => setRepeatPassword(value)}
-              // error={errors?.password}
+              // error={Boolean(errors?.password)}
             />
             <Button
               buttonColor={isFormValid ? 'red' : 'grey'}
