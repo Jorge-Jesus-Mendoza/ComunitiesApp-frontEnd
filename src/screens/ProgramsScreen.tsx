@@ -23,57 +23,6 @@ export const ProgramsScreen = props => {
     Authorization: `Bearer ${authState.tokenId}`,
   };
 
-  const [items] = React.useState([
-    {
-      key: 1,
-      name: 'Cupcake',
-      calories: 356,
-      fat: 262,
-    },
-    {
-      key: 2,
-      name: 'Eclair',
-      calories: 262,
-      fat: 16,
-    },
-    {
-      key: 3,
-      name: 'Frozen yogurt',
-      calories: 159,
-      fat: 6,
-    },
-    {
-      key: 4,
-      name: 'Gingerbread',
-      calories: 305,
-      fat: 3.7,
-    },
-    {
-      key: 5,
-      name: 'Cupcake',
-      calories: 356,
-      fat: 16,
-    },
-    {
-      key: 6,
-      name: 'Eclair',
-      calories: 262,
-      fat: 16,
-    },
-    {
-      key: 7,
-      name: 'Frozen yogurt',
-      calories: 159,
-      fat: 6,
-    },
-    {
-      key: 8,
-      name: 'Gingerbread',
-      calories: 305,
-      fat: 3.7,
-    },
-  ]);
-
   useEffect(() => {
     communityApi
       .get('/location/municipality/5', {headers})
@@ -107,7 +56,7 @@ export const ProgramsScreen = props => {
   ];
 
   const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, items.length);
+  const to = Math.min((page + 1) * itemsPerPage, item?.length);
 
   React.useEffect(() => {
     setPage(0);
