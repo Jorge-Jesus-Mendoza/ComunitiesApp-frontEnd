@@ -30,7 +30,7 @@ const familyInitialValues: Family = {
   sex: '',
   telephone: '',
   email: '',
-  identity_card: true,
+  identity_card: false,
   son_number: 1,
   persons: []
 };

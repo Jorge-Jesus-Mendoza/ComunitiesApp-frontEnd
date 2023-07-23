@@ -4,14 +4,30 @@ import { ScrollView, TouchableOpacity, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { Button, Card, RadioButton, Text, TextInput } from 'react-native-paper';
-import DataGrid from '../components/DataTable';
 import { TextField } from '../components/TextField';
-import { Nationality, familyInitialValues, identityCard } from '../data';
 import useDropdown from '../hooks/useDropDown';
-import { Person } from '../interfaces/FamilyHomeInterfaces';
 import { colors } from '../theme/appTheme';
 
-
+const Nationality = [
+  {
+    label: 'E',
+    value: 'E'
+  },
+  {
+    label: 'V',
+    value: 'V'
+  },
+];
+const identityCard = [
+  {
+    label: "Cedulado",
+    value: true
+  },
+  {
+    label: 'No Cedulado',
+    value: false
+  },
+];
 const FamilyHomeScreen = () => {
   const { isOpen, toggleOpen } = useDropdown(false);
   const { isOpen: isOpen2, toggleOpen: toggleOpen2 } = useDropdown(false);
@@ -24,7 +40,7 @@ const FamilyHomeScreen = () => {
         backgroundColor: "white",
       }}>
         <Formik
-          initialValues={familyInitialValues}
+          initialValues={{ name: '', last_name: '', birthdate: new Date(Date.now()), identification_card: '', nationality: '', sex: '', telephone: '', email: '', identity_card: true, son_number: 1, persons: [] }}
             onSubmit={values => console.log(values)}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue }) => {
@@ -35,7 +51,6 @@ const FamilyHomeScreen = () => {
               return (
                 <>
                   <Card.Content>
-
                   <View style={{
                     marginVertical: 10,
                   }}>
@@ -172,7 +187,7 @@ const FamilyHomeScreen = () => {
                     placeholder='Ej: 00000000'
                     inputMode='numeric'
                     label={`Documento de identidad${!values.identity_card ? ' del Representante' : ''}`}
-                      value={values.identification_card.toString()}
+                      value={values.identification_card}
                     onChangeText={handleChange('identification_card')}
                     error={Boolean(errors.identification_card)}
                     errorTitle={errors.identification_card}
@@ -209,13 +224,7 @@ const FamilyHomeScreen = () => {
 
                     <Button
                       onPress={() => {
-                        const newPerson: Person[] = [...values.persons];
-                        const newValuesToPerson: Person = {
-                          ...values,
-                          id: newPerson.length + 1,
-                        };
-                        newPerson.push(newValuesToPerson);
-                        setFieldValue('persons', newPerson);
+
                       }}
                       style={{
                         marginTop: 16,
@@ -231,12 +240,6 @@ const FamilyHomeScreen = () => {
                     >
                       Agregar
                     </Button>
-                    <DataGrid
-                      rows={values.persons}
-                      containerStyles={{
-                        marginTop: 16,
-                      }}
-                    />
                   </Card.Content>
                   <Card.Actions>
                     <Button onPress={handleSubmit} style={{

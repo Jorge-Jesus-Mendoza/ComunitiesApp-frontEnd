@@ -2,7 +2,7 @@ import { StyleProp, TextStyle, View } from 'react-native';
 import { Text, TextInput, TextInputProps } from 'react-native-paper';
 import { colors } from '../theme/appTheme';
 
-interface ExtendedProps extends TextInputProps {
+export interface ExtendedTextFieldProps extends TextInputProps {
   // any other props that come into the component
   errorTextStyles?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<TextStyle>;
@@ -16,7 +16,7 @@ export const TextField = ({
   containerStyle = {},
   errorTitle,
   ...props
-}: ExtendedProps) => {
+}: ExtendedTextFieldProps) => {
   return (
     <View style={{
       width: '100%',
