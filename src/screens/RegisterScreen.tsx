@@ -210,11 +210,11 @@ export const RegisterScreen = ({ navigation }: Props) => {
             <View>
               <RadioButton.Group
                 onValueChange={value =>
-                  setFieldValue('naturalized', Number(value))
+                  setFieldValue('naturalized', value)
                 }
                 value={`${values.naturalized}`}>
-                <RadioButton.Item label="Nacional" value="1" />
-                <RadioButton.Item label="Persona Naturalizada" value="2" />
+                <RadioButton.Item label="Nacional" value="V" />
+                <RadioButton.Item label="Persona Naturalizada" value="E" />
               </RadioButton.Group>
               <Divider style={{backgroundColor: 'grey'}} bold />
             </View>

@@ -1,12 +1,12 @@
-import {RouteProp} from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import {
   StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
 import React from 'react';
-import {Route} from '../interfaces/routesInterfaces';
-import {DashboardHome, FamilyHome, ProgramsHome} from '../routes';
-import {RootTopTabParams} from './TopTabNavigator';
+import { Route } from '../interfaces/routesInterfaces';
+import { DashboardHome, FamilyHome, ProgramsHome } from '../routes';
+import { RootTopTabParams } from './TopTabNavigator';
 
 export type RootStackParams = {
   DashboardScreen: undefined;

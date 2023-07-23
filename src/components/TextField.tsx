@@ -6,7 +6,7 @@ interface ExtendedProps extends TextInputProps {
   // any other props that come into the component
   errorTextStyles?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<TextStyle>;
-  errorTitle?: string;
+  errorTitle?: any;
 }
 export const TextField = ({
   error,
@@ -20,7 +20,7 @@ export const TextField = ({
   return (
     <View style={{
       width: '100%',
-      ...containerStyle as Object,
+      ...containerStyle as object,
     }}>
       <TextInput
         selectionColor={colors.primary}
@@ -29,10 +29,11 @@ export const TextField = ({
         activeOutlineColor={colors.primary}
         underlineColor={colors.primaryDark}
         activeUnderlineColor={colors.primary}
+
         style={{
           backgroundColor: 'transparent',
           width: '100%',
-          ...style as Object,
+          ...style as object,
         }}
         error={error}
         {...props}
@@ -41,7 +42,7 @@ export const TextField = ({
         <Text
           style={{
             color: colors.error,
-            ...errorTextStyles as Object,
+            ...errorTextStyles as object,
           }}>
           {errorTitle || 'Este campo es requerido'}
         </Text>
