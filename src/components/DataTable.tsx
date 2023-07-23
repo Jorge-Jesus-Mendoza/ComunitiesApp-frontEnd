@@ -81,7 +81,6 @@ const DataGrid: React.FC<DataGridProps> = ({ rows, columns, containerStyles }) =
   useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
-
   return (
     <View
       style={{
@@ -101,7 +100,12 @@ const DataGrid: React.FC<DataGridProps> = ({ rows, columns, containerStyles }) =
         }}>
           {columns?.length && columns.map(({ headerProps, titleProps, headerName }: any) => (
             <DataTable.Header {...headerProps}>
-              <DataTable.Title {...titleProps}>{headerName}</DataTable.Title>
+              <DataTable.Title
+                textStyle={{
+                  fontWeight: 'bold',
+                }}
+                {...titleProps}
+              >{headerName}</DataTable.Title>
             </DataTable.Header>
 
           ))}
@@ -115,40 +119,16 @@ const DataGrid: React.FC<DataGridProps> = ({ rows, columns, containerStyles }) =
               ))}
             </DataTable.Row>
           ))}
-          <DataTable.Header>
-            <DataTable.Title>Dessert</DataTable.Title>
-            <DataTable.Title numeric>Calories</DataTable.Title>
-            <DataTable.Title numeric>Fat</DataTable.Title>
-            <DataTable.Title numeric>weight</DataTable.Title>
-            <DataTable.Title numeric>water</DataTable.Title>
-            <DataTable.Title numeric>ball</DataTable.Title>
-            <DataTable.Title numeric>think</DataTable.Title>
-            <DataTable.Title numeric>light</DataTable.Title>
-          </DataTable.Header>
-
-          {items.slice(from, to).map((item) => (
-            <DataTable.Row key={item.key}>
-              <DataTable.Cell>{item.name}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.calories}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.fat}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.weight}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.water}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.ball}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.think}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.light}</DataTable.Cell>
-            </DataTable.Row>
-          ))}
-
           <DataTable.Pagination
             page={page}
             numberOfPages={Math.ceil(items.length / itemsPerPage)}
             onPageChange={(page) => setPage(page)}
-            label={`${from + 1}-${to} of ${items.length}`}
+            label={`${from + 1}-${to} de ${items.length}`}
             numberOfItemsPerPageList={numberOfItemsPerPageList}
             numberOfItemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}
             showFastPaginationControls
-            selectPageDropdownLabel={'Rows per page'}
+            selectPageDropdownLabel="Filas por página"
           />
         </DataTable>
       </ScrollView>

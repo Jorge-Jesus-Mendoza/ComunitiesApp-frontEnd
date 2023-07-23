@@ -6,29 +6,12 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { Button, Card, RadioButton, Text, TextInput } from 'react-native-paper';
 import DataGrid from '../components/DataTable';
 import { TextField } from '../components/TextField';
+import { Nationality, familyInitialValues, identityCard } from '../data';
 import useDropdown from '../hooks/useDropDown';
+import { Person } from '../interfaces/FamilyHomeInterfaces';
 import { colors } from '../theme/appTheme';
 
-const Nationality = [
-  {
-    label: 'E',
-    value: 'E'
-  },
-  {
-    label: 'V',
-    value: 'V'
-  },
-];
-const identityCard = [
-  {
-    label: "Cedulado",
-    value: true
-  },
-  {
-    label: 'No Cedulado',
-    value: false
-  },
-];
+
 const FamilyHomeScreen = () => {
   const { isOpen, toggleOpen } = useDropdown(false);
   const { isOpen: isOpen2, toggleOpen: toggleOpen2 } = useDropdown(false);
@@ -36,41 +19,23 @@ const FamilyHomeScreen = () => {
 
   return (
     <ScrollView>
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
-        margin: 16,
-      }}>
-
-        <Button
-          style={{
-            backgroundColor: colors.primary,
-            // padding: ,
-            width: 100,
-            borderRadius: 16,
-          }}
-          labelStyle={{
-            color: 'white',
-            fontSize: 16,
-          }}
-        >ok</Button>
-      </View>
       <Card style={{
         margin: 16,
         backgroundColor: "white",
       }}>
-
-        <Card.Content>
-          <Formik
-            initialValues={{ name: '', last_name: '', birthdate: new Date(Date.now()), identification_card: '', nationality: '', sex: '', telephone: '', email: '', identity_card: true, son_number: 1 }}
+        <Formik
+          initialValues={familyInitialValues}
             onSubmit={values => console.log(values)}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue }) => {
               const edad = moment().diff(values.birthdate, 'years');
               const under9YearsOld = edad < 9;
+            console.log('values', JSON.stringify(values, null, 2), '\nerrors', JSON.stringify(errors, null, 2));
+            console.log('edad', edad, '\nunder9YearsOld', under9YearsOld)
               return (
                 <>
+                  <Card.Content>
+
                   <View style={{
                     marginVertical: 10,
                   }}>
@@ -109,7 +74,7 @@ const FamilyHomeScreen = () => {
                     }}>
                       <Text variant='labelSmall'>Cedulado</Text>
                       <DropDownPicker
-                        setValue={() => setFieldValue('identity_card', !under9YearsOld)}
+                          setValue={() => { }}
                         items={identityCard}
                         open={isOpen3}
                         setOpen={toggleOpen3}
@@ -207,7 +172,7 @@ const FamilyHomeScreen = () => {
                     placeholder='Ej: 00000000'
                     inputMode='numeric'
                     label={`Documento de identidad${!values.identity_card ? ' del Representante' : ''}`}
-                    value={values.identification_card}
+                      value={values.identification_card.toString()}
                     onChangeText={handleChange('identification_card')}
                     error={Boolean(errors.identification_card)}
                     errorTitle={errors.identification_card}
@@ -242,38 +207,57 @@ const FamilyHomeScreen = () => {
 
 
 
-                <Button onPress={handleSubmit} style={{
-                  marginTop: 16,
-                  backgroundColor: colors.primary,
-                  borderRadius: 16,
+                    <Button
+                      onPress={() => {
+                        const newPerson: Person[] = [...values.persons];
+                        const newValuesToPerson: Person = {
+                          ...values,
+                          id: newPerson.length + 1,
+                        };
+                        newPerson.push(newValuesToPerson);
+                        setFieldValue('persons', newPerson);
+                      }}
+                      style={{
+                        marginTop: 16,
+                        backgroundColor: colors.primary,
+                        borderRadius: 16,
+                        width: "30%",
+                        alignSelf: 'flex-end',
+                      }}
+                      labelStyle={{
+                        color: 'white',
+                        fontSize: 16,
+                      }}
+                    >
+                      Agregar
+                    </Button>
+                    <DataGrid
+                      rows={values.persons}
+                      containerStyles={{
+                        marginTop: 16,
+                      }}
+                    />
+                  </Card.Content>
+                  <Card.Actions>
+                    <Button onPress={handleSubmit} style={{
+                      marginTop: 16,
+                      backgroundColor: colors.primary,
+                      borderRadius: 16,
+                      flex: 1,
+                      alignSelf: 'center'
+                    }}
+                      labelStyle={{
+                        color: 'white',
+                        fontSize: 16,
+                      }}
 
-                }}
-                  labelStyle={{
-                    color: 'white',
-                    fontSize: 16,
-                  }}
+                    >Enviar Datos del Núcleo Familiar</Button>
 
-                >Agregar</Button>
-                <Text>
-                  {console.log('values', JSON.stringify(values, null, 2), '\nerrors', JSON.stringify(errors, null, 2))}
-                </Text>
+                  </Card.Actions>
                 </>
               );
-            }}
-
-          </Formik>
-        </Card.Content>
-      </Card>
-      <Card
-        style={{
-          margin: 16,
-          backgroundColor: "white",
-        }}
-      >
-        <Card.Content>
-          <Text variant='headlineSmall'>Card content</Text>
-          <DataGrid />
-        </Card.Content>
+          }}
+        </Formik>
       </Card>
     </ScrollView>
   );

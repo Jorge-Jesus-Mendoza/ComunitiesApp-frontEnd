@@ -30,7 +30,7 @@ export interface registerUserItem {
   last_name: string;
   sex: string;
   birthdate: Date;
-  identification_card: string;
+  identification_card: number | string;
   telephone: string;
   email: string;
   password: string;
