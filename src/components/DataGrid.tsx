@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, isValidElement, useEffect, useState } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { DataTable } from 'react-native-paper';
@@ -79,7 +79,8 @@ const DataGrid: FC<DataGridProps> = ({ rows, columns, containerStyles }) => {
                   }}
                 >
                   {columns.map(({ field, cellProps }) => {
-                    console.log('field', field);
+                    const value = row[field];
+                    const childrenProps = { value, row };
                     return (
                       <DataTable.Cell
                         key={`${field}${row.id}`}
@@ -92,7 +93,11 @@ const DataGrid: FC<DataGridProps> = ({ rows, columns, containerStyles }) => {
                           ...(cellProps?.style as object),
                         }}
                       >
-                        {row[field]}
+                        {cellProps && (typeof cellProps.children === 'function' &&
+                          cellProps.children(childrenProps) ||
+                          isValidElement(cellProps.children) &&
+                          cellProps.children)
+                          || row[field]}
                 </DataTable.Cell>
                     );
                   })}

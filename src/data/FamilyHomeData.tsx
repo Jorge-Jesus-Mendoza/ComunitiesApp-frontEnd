@@ -1,7 +1,7 @@
-import { GridColDef, GridRow } from "../interfaces";
-import { Family, IdentityCardItem, NationalityItem } from "../interfaces/FamilyHomeInterfaces";
+import { GridColDef } from "../interfaces";
+import { Family, OptionItem } from "../interfaces/FamilyHomeInterfaces";
 
-const Nationality: NationalityItem[] = [
+const Nationality: OptionItem[] = [
   {
     label: 'E',
     value: 'E'
@@ -11,7 +11,7 @@ const Nationality: NationalityItem[] = [
     value: 'V'
   },
 ];
-const identityCard: IdentityCardItem[] = [
+const identityCard: OptionItem[] = [
   {
     label: "Cedulado",
     value: true
@@ -22,7 +22,19 @@ const identityCard: IdentityCardItem[] = [
   },
 ];
 
+const familyNucleusOpt: OptionItem[] = [
+  {
+    label: 'Si',
+    value: true
+  },
+  {
+    label: 'No',
+    value: false
+  },
+]
+
 const familyInitialValues: Family = {
+  id: '',
   name: '',
   last_name: '',
   birthdate: new Date(Date.now()),
@@ -33,56 +45,58 @@ const familyInitialValues: Family = {
   email: '',
   identity_card: false,
   son_number: '',
+  family_nucleus: false,
+  relationship: '',
   persons: []
 };
 
-const exampleRows: GridRow[] = [
-  {
-    id: 1,
-    identification_card: 12312,
-    name: 'jesus nombre2',
-    last_name: 'Apellido1 apellido2 ',
-    calories: 356,
-    fat: 16
-  },
-  {
-    id: 2,
-    identification_card: 231234,
-    name: 'clara nombre2',
-    last_name: 'Apellido1 apellido2 ',
-    calories: 262,
-    fat: 16
-  },
-  {
-    id: 3,
-    identification_card: 1231231,
-    name: 'Eclair nombre2',
-    last_name: 'Apellido1 apellido2 ',
-    calories: 159,
-    fat: 6
-  },
-  {
-    id: 4,
-    identification_card: 1232312,
-    name: 'Ginger nombre2',
-    last_name: 'Apellido1 apellido2 ',
-    calories: 305,
-    fat: 3.7
-  },
-];
-
-const exampleColumns: GridColDef[] = [
+const columnsPerson: GridColDef[] = [
   {
     field: 'identification_card',
-    headerName: 'Cédula',
+    headerName: 'Documento de Identidad',
     cellProps: {
       numeric: true,
     }
   },
-  { field: 'name', headerName: 'Nombre' },
-  { field: 'last_name', headerName: 'Apellido', },
-  { field: 'fat', headerName: 'Fat', },
-  { field: 'action', headerName: 'Acción', },
+  {
+    field: 'name',
+    headerName: 'Nombre'
+  },
+  {
+    field: 'last_name',
+    headerName: 'Apellido',
+  },
+  {
+    field: 'birthdate',
+    headerName: 'Fecha de Nacimiento',
+  },
+  {
+    field: 'naturalized',
+    headerName: 'Nacionalidad',
+  },
+  {
+    field: 'sex',
+    headerName: 'Sexo',
+  },
+  {
+    field: 'telephone',
+    headerName: 'teléfono',
+  },
+  {
+    field: 'email',
+    headerName: 'Correo Electrónico',
+  },
+  {
+    field: 'son_number',
+    headerName: 'N# de Hijo',
+    cellProps: {
+      numeric: true,
+    }
+  },
+  {
+    field: 'action',
+    headerName: 'Acción',
+  },
 ];
-export { Nationality, exampleColumns, exampleRows, familyInitialValues, identityCard };
+export { Nationality, columnsPerson, familyInitialValues, familyNucleusOpt, identityCard };
 

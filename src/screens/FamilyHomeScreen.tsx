@@ -1,11 +1,12 @@
 import { Formik } from 'formik';
+import moment from 'moment';
 import { ScrollView, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Button, Card, RadioButton, Text } from 'react-native-paper';
-import DataGrid from '../components/DataTable';
+import DataGrid from '../components/DataGrid';
 import DatePicker from '../components/DatePicker';
 import { TextField } from '../components/TextField';
-import { Nationality, exampleColumns, exampleRows, familyInitialValues, identityCard } from '../data';
+import { Nationality, columnsPerson, familyInitialValues, familyNucleusOpt, identityCard } from '../data';
 import { compareDateWithNumber } from '../helpers';
 import useDropdown from '../hooks/useDropDown';
 import { Person } from '../interfaces/FamilyHomeInterfaces';
@@ -14,6 +15,7 @@ import { colors } from '../theme/appTheme';
 const FamilyHomeScreen = () => {
   const { isOpen, toggleOpen } = useDropdown(false);
   const { isOpen: isOpen3, toggleOpen: toggleOpen3 } = useDropdown(false);
+  const { isOpen: isOpen2, toggleOpen: toggleOpen2 } = useDropdown(false);
 
   return (
     <ScrollView>
@@ -26,8 +28,45 @@ const FamilyHomeScreen = () => {
           onSubmit={values => console.log(JSON.stringify(values, null, 2))}
           >
           {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue, resetForm, setValues }) => {
-
+            const existFamilyNucleusInPersons = values.persons?.some(({ family_nucleus }) => family_nucleus);
             const isUnder9YearsOld = compareDateWithNumber(values.birthdate, 9, '<');
+            columnsPerson[columnsPerson.length - 1].cellProps = {
+              children: ({ row, value }) =>
+                <>
+                  <Button
+                    textColor={colors.primary}
+                    onPress={() => {
+                      const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
+                      newPersons.splice(Number(row.id), 1);
+                      newPersons.forEach((person, index) => {
+                        person.id = index;
+                      });
+                      setValues({
+                        ...familyInitialValues,
+                        persons: newPersons,
+                      });
+                    }}
+                  >
+                    Eliminar
+                  </Button>
+                  <Button
+                    textColor={colors.primaryBlue}
+                    onPress={() => {
+                      const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
+                      const person = newPersons.find(({ id }) => id === row.id);
+                      if (person) {
+                        newPersons.splice(Number(row.id), 1);
+                        setValues({
+                          ...person,
+                          persons: newPersons,
+                        });
+                      }
+                    }}
+                  >
+                    Editar
+                  </Button>
+                </>
+            }
             console.log(JSON.stringify(values, null, 2));
               return (
                 <>
@@ -35,13 +74,12 @@ const FamilyHomeScreen = () => {
                     <DatePicker
                       errorTitle={errors.birthdate}
                       error={Boolean(errors.birthdate)}
-                      date={values.birthdate}
+                      date={new Date(values.birthdate)}
                       label="Fecha de Nacimiento"
                       DatePickerProps={{
                         onConfirm: value => {
                           if (compareDateWithNumber(value, 9, '<'))
                             setFieldValue('identity_card', false);
-
                           setFieldValue('birthdate', value);
                         },
                         onCancel: () => { },
@@ -52,9 +90,12 @@ const FamilyHomeScreen = () => {
                     flexDirection: 'row',
                   }}>
 
-                      {!isUnder9YearsOld && <View style={{
+                      {!isUnder9YearsOld &&
+                        <View
+                          style={{
                       marginLeft: 15,
-                    }}>
+                          }}
+                        >
                       <Text variant='labelSmall'>Cedulado</Text>
                       <DropDownPicker
                           setValue={() => { }}
@@ -77,9 +118,10 @@ const FamilyHomeScreen = () => {
                           width: 150,
                         }}
                       />
-                      </View>}
+                        </View>
+                      }
                     <View style={{
-                      marginLeft: 15,
+                        marginLeft: 10,
                     }}>
                       <Text variant='labelSmall'>Nacionalidad</Text>
                       <DropDownPicker
@@ -104,6 +146,35 @@ const FamilyHomeScreen = () => {
                         }}
                       />
                     </View>
+
+                      {!existFamilyNucleusInPersons &&
+                        <View style={{
+                          marginLeft: 10,
+                        }}>
+                          <Text variant='labelSmall'>Es Jefe De Familia</Text>
+                          <DropDownPicker
+                            setValue={() => { }}
+                            items={familyNucleusOpt}
+                            open={isOpen2}
+                            setOpen={toggleOpen2}
+                            value={values.family_nucleus}
+                            dropDownDirection="TOP"
+                            onSelectItem={({ value }) => setFieldValue('family_nucleus', value)}
+                            placeholder=''
+                            labelStyle={{
+                              fontSize: 16,
+                              color: 'black',
+                              fontWeight: 'bold',
+                            }}
+                            style={{
+                              width: 80,
+                            }}
+                            dropDownContainerStyle={{
+                              width: 80,
+                            }}
+                          />
+                        </View>
+                      }
                   </View>
                   <TextField
                     placeholder='Ej: Juan Pedro'
@@ -192,19 +263,24 @@ const FamilyHomeScreen = () => {
 
                     <Button
                       onPress={() => {
-                        const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
                         const newValues = {
-                          id: newPersons.length + 1,
                           ...values
                         };
+                        newValues.birthdate = moment(newValues.birthdate).format('YYYY-MM-DD');
                         if (newValues?.persons !== undefined)
                           delete newValues?.persons;
-                        newPersons.push(newValues);
+
+                        const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
+
+                        newValues.id = typeof newValues.id === 'number' ? newValues.id : newPersons.length;
+
+
+                        newPersons.splice(Number(newValues.id), 0, newValues);
+
                         setValues({
                           ...familyInitialValues,
                           persons: newPersons,
                         });
-                        // resetForm();
                       }}
                       style={{
                         marginTop: 16,
@@ -220,7 +296,7 @@ const FamilyHomeScreen = () => {
                     >
                       Agregar
                     </Button>
-                    <DataGrid rows={exampleRows} columns={exampleColumns} />
+                    <DataGrid rows={values.persons || []} columns={columnsPerson} />
                   </Card.Content>
                   <Card.Actions>
                     <Button onPress={handleSubmit} style={{

@@ -8,6 +8,9 @@ export const colors = {
   secondaryDark: '#b51617',
   secondaryLight: '#e2191a',
   error: '#dc3545',
+  primaryBlue: '#0091e5',
+  secondaryBlueDark: '#1c2d63',
+  primaryYellow: '#ffa400',
 };
 
 export const styles = StyleSheet.create({
