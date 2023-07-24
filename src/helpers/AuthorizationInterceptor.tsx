@@ -1,11 +1,11 @@
-import communityApi from "../api/communityApi";
-const AuthorizationInterceptor = (token: string) =>
+import communityApi from '../api/communityApi';
+export const AuthorizationInterceptor = (token: string) =>
   communityApi.interceptors.request.use(
-    (config) => {
+    config => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
       return config;
     },
-    (error) => Promise.reject(error)
+    error => Promise.reject(error),
   );

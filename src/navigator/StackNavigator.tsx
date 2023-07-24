@@ -1,15 +1,15 @@
-import { RouteProp } from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import {
   StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
 import React from 'react';
-import { Route } from '../interfaces/routesInterfaces';
-import { DashboardHome, FamilyHome, ProgramsHome } from '../routes';
-import { RootTopTabParams } from './TopTabNavigator';
+import {Route} from '../interfaces/routesInterfaces';
+import {DashboardHome, FamilyHome, ProgramsHome} from '../routes';
+import {RootTopTabParams} from './TopTabNavigator';
 
 export type RootStackParams = {
-  DashboardScreen: undefined;
+  DashboardHomeScreen: undefined;
   FamilyHomeScreen: undefined;
   ProgramsHomeScreen: undefined;
 };
@@ -24,7 +24,7 @@ const RoutesList: Route[] = [DashboardHome, FamilyHome, ProgramsHome];
 
 const StackNavigator = ({route, navigation, ...props}: StackScreenProps) => {
   const {initialRouteName} = route.params ?? {
-    initialRouteName: 'DashboardScreen',
+    initialRouteName: 'DashboardHomeScreen',
   };
   // if (initialRouteName) navigation.navigate(initialRouteName as keyof RootStackParams);
   console.log('initialRouteName', initialRouteName);

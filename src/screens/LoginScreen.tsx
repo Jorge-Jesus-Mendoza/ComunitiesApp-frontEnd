@@ -1,17 +1,18 @@
-import { DrawerScreenProps } from '@react-navigation/drawer';
-import { useFormik } from 'formik';
-import React, { useContext, useState } from 'react';
-import { Image, ScrollView, View, useWindowDimensions } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import {DrawerScreenProps} from '@react-navigation/drawer';
+import {useFormik} from 'formik';
+import React, {useContext, useState} from 'react';
+import {Image, ScrollView, View, useWindowDimensions} from 'react-native';
+import {Button, Text} from 'react-native-paper';
 import communityApi from '../api/communityApi';
-import { TextField } from '../components/TextField';
-import { AuthContext } from '../context/AuthContext';
-import { initialLoginData } from '../interfaces/authInterfaces';
-import { RootDrawerParams } from '../navigator/DrawerNavigator';
-import { styles } from '../theme/appTheme';
-interface Props extends DrawerScreenProps<RootDrawerParams, "LoginScreen"> { }
+import {TextField} from '../components/TextField';
+import {AuthContext} from '../context/AuthContext';
+import {initialLoginData} from '../interfaces/authInterfaces';
+import {RootDrawerParams} from '../navigator/DrawerNavigator';
+import {styles} from '../theme/appTheme';
+import {AuthorizationInterceptor} from '../helpers/AuthorizationInterceptor';
+interface Props extends DrawerScreenProps<RootDrawerParams, 'LoginScreen'> {}
 
-export const LoginScreen = ({ navigation }: Props) => {
+export const LoginScreen = ({navigation}: Props) => {
   const {width} = useWindowDimensions();
 
   const {logIn} = useContext(AuthContext);
@@ -26,9 +27,9 @@ export const LoginScreen = ({ navigation }: Props) => {
         communityApi
           .post('/auth/login', values)
           .then(response => {
-            logIn(response.data);
+            AuthorizationInterceptor(response.data.token);
+            logIn(response.data, navigation);
             resetForm();
-            navigation.navigate('TopTabNavigator');
           })
           .catch(error => {
             if (error.response) {
@@ -57,8 +58,6 @@ export const LoginScreen = ({ navigation }: Props) => {
         return errors;
       },
     });
-
-  console.log(Array.isArray(''));
 
   const isFormValid = errors?.identification_card || errors?.password;
 
