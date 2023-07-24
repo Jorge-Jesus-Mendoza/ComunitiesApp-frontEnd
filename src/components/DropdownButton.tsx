@@ -1,28 +1,43 @@
-import { useState } from 'react';
-import DropDownPicker, { DropDownPickerProps } from 'react-native-dropdown-picker';
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
+import DropDownPicker, { DropDownPickerProps, ValueType } from 'react-native-dropdown-picker';
+import { Text } from 'react-native-paper';
+import useDropdown from '../hooks/useDropDown';
 
 type Item = {
   label: string;
-  value: string;
+  value: ValueType;
 };
-interface DropDownButtonProps extends DropDownPickerProps<Item> {
 
-}
 
-const DropdownButton = ({ placeholder, value, items, onSelectItem }: DropDownButtonProps) => {
-  const [openSelect, setOpenSelect] = useState(false);
-  const setOpen = () => setOpenSelect(prev => !prev);
+type Select<ValueType> = DropDownPickerProps<ValueType> & {
+  label?: string;
+  externalContainerStyle?: StyleProp<ViewStyle>;
+  externalLabelStyle?: StyleProp<TextStyle>;
+};
+
+
+const DropdownButton = <ValueType extends Item>({ externalContainerStyle, externalLabelStyle, label, ...props }: Select<ValueType>) => {
+  const { isOpen, toggleOpen } = useDropdown(false);
   return (
-    <DropDownPicker
-      items={items}
-      open={openSelect}
-      setOpen={setOpen}
-      placeholder={placeholder}
-      value={value}
-      dropDownDirection="TOP"
-      onSelectItem={onSelectItem}
-      setValue={val => console.log(val)}
-    />
+    <View style={{
+      marginLeft: 15,
+      ...externalContainerStyle as object
+    }}>
+      <Text
+        variant='labelSmall'
+        style={{
+          ...externalLabelStyle as object
+        }}
+      >
+        {label}
+      </Text>
+      <DropDownPicker
+        {...props}
+        setValue={() => { }}
+        open={isOpen}
+        setOpen={toggleOpen}
+      />
+    </View>
   );
 };
 

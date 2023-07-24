@@ -1,6 +1,7 @@
-import { Family, IdentityCardItem, NationalityItem } from "../interfaces/FamilyHomeInterfaces";
+import { GridColDef } from "../interfaces";
+import { Family, OptionItem } from "../interfaces/FamilyHomeInterfaces";
 
-const Nationality: NationalityItem[] = [
+const Nationality: OptionItem[] = [
   {
     label: 'E',
     value: 'E'
@@ -10,7 +11,7 @@ const Nationality: NationalityItem[] = [
     value: 'V'
   },
 ];
-const identityCard: IdentityCardItem[] = [
+const identityCard: OptionItem[] = [
   {
     label: "Cedulado",
     value: true
@@ -21,18 +22,81 @@ const identityCard: IdentityCardItem[] = [
   },
 ];
 
+const familyNucleusOpt: OptionItem[] = [
+  {
+    label: 'Si',
+    value: true
+  },
+  {
+    label: 'No',
+    value: false
+  },
+]
+
 const familyInitialValues: Family = {
+  id: '',
   name: '',
   last_name: '',
   birthdate: new Date(Date.now()),
   identification_card: '',
-  nationality: '',
-  sex: '',
+  naturalized: '',
+  sex: 'M',
   telephone: '',
   email: '',
   identity_card: false,
-  son_number: 1,
+  son_number: '',
+  family_nucleus: false,
+  relationship: '',
   persons: []
 };
-export { Nationality, familyInitialValues, identityCard };
+
+const columnsPerson: GridColDef[] = [
+  {
+    field: 'identification_card',
+    headerName: 'Documento de Identidad',
+    cellProps: {
+      numeric: true,
+    }
+  },
+  {
+    field: 'name',
+    headerName: 'Nombre'
+  },
+  {
+    field: 'last_name',
+    headerName: 'Apellido',
+  },
+  {
+    field: 'birthdate',
+    headerName: 'Fecha de Nacimiento',
+  },
+  {
+    field: 'naturalized',
+    headerName: 'Nacionalidad',
+  },
+  {
+    field: 'sex',
+    headerName: 'Sexo',
+  },
+  {
+    field: 'telephone',
+    headerName: 'teléfono',
+  },
+  {
+    field: 'email',
+    headerName: 'Correo Electrónico',
+  },
+  {
+    field: 'son_number',
+    headerName: 'N# de Hijo',
+    cellProps: {
+      numeric: true,
+    }
+  },
+  {
+    field: 'action',
+    headerName: 'Acción',
+  },
+];
+export { Nationality, columnsPerson, familyInitialValues, familyNucleusOpt, identityCard };
 

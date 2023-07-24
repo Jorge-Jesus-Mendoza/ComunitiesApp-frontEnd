@@ -5,11 +5,13 @@ import DateTimePickerModal, { DateTimePickerProps } from 'react-native-modal-dat
 import { TextInput } from 'react-native-paper';
 import useDropdown from '../hooks/useDropDown';
 import { ExtendedTextFieldProps, TextField } from './TextField';
+
 interface DatePickerProps extends ExtendedTextFieldProps {
   DatePickerProps: DateTimePickerProps;
-  containerStyles: StyleProp<ViewStyle>;
+  containerStyles?: StyleProp<ViewStyle>;
+  date: Date;
 }
-const DatePicker = ({ DatePickerProps, containerStyles, value, error, ...props }: DatePickerProps) => {
+const DatePicker = ({ DatePickerProps, containerStyles, date, error, ...props }: DatePickerProps) => {
   const { isOpen, toggleOpen } = useDropdown(false);
   return (
     <View style={{
@@ -22,17 +24,21 @@ const DatePicker = ({ DatePickerProps, containerStyles, value, error, ...props }
           placeholder='Ej: DD-MM-YYYY'
           autoComplete='birthdate-full'
           label="Fecha de Nacimiento"
-          value={moment(value).format('DD-MM-YYYY')}
+          value={moment(date).format('DD-MM-YYYY')}
           error={Boolean(error)}
           right={<TextInput.Icon icon="calendar" disabled />}
           {...props}
         />
       </TouchableOpacity>
       <DateTimePickerModal
+        date={date}
+        mode='date'
         isVisible={isOpen}
-        date={moment(value).toDate()}
         {...DatePickerProps}
-        onConfirm={DatePickerProps.onConfirm}
+        onConfirm={(date) => {
+          toggleOpen();
+          DatePickerProps.onConfirm(date);
+        }}
         onCancel={toggleOpen}
       />
     </View>

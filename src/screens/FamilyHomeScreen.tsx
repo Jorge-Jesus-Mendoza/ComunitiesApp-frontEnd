@@ -1,37 +1,21 @@
 import { Formik } from 'formik';
 import moment from 'moment';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { Button, Card, RadioButton, Text, TextInput } from 'react-native-paper';
+import { Button, Card, RadioButton, Text } from 'react-native-paper';
+import DataGrid from '../components/DataGrid';
+import DatePicker from '../components/DatePicker';
 import { TextField } from '../components/TextField';
+import { Nationality, columnsPerson, familyInitialValues, familyNucleusOpt, identityCard } from '../data';
+import { compareDateWithNumber } from '../helpers';
 import useDropdown from '../hooks/useDropDown';
+import { Person } from '../interfaces/FamilyHomeInterfaces';
 import { colors } from '../theme/appTheme';
 
-const Nationality = [
-  {
-    label: 'E',
-    value: 'E'
-  },
-  {
-    label: 'V',
-    value: 'V'
-  },
-];
-const identityCard = [
-  {
-    label: "Cedulado",
-    value: true
-  },
-  {
-    label: 'No Cedulado',
-    value: false
-  },
-];
 const FamilyHomeScreen = () => {
   const { isOpen, toggleOpen } = useDropdown(false);
-  const { isOpen: isOpen2, toggleOpen: toggleOpen2 } = useDropdown(false);
   const { isOpen: isOpen3, toggleOpen: toggleOpen3 } = useDropdown(false);
+  const { isOpen: isOpen2, toggleOpen: toggleOpen2 } = useDropdown(false);
 
   return (
     <ScrollView>
@@ -40,62 +24,87 @@ const FamilyHomeScreen = () => {
         backgroundColor: "white",
       }}>
         <Formik
-          initialValues={{ name: '', last_name: '', birthdate: new Date(Date.now()), identification_card: '', nationality: '', sex: '', telephone: '', email: '', identity_card: true, son_number: 1, persons: [] }}
-            onSubmit={values => console.log(values)}
+          initialValues={familyInitialValues}
+          onSubmit={values => console.log(JSON.stringify(values, null, 2))}
           >
-            {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue }) => {
-              const edad = moment().diff(values.birthdate, 'years');
-              const under9YearsOld = edad < 9;
-            console.log('values', JSON.stringify(values, null, 2), '\nerrors', JSON.stringify(errors, null, 2));
-            console.log('edad', edad, '\nunder9YearsOld', under9YearsOld)
+          {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue, resetForm, setValues }) => {
+            const existFamilyNucleusInPersons = values.persons?.some(({ family_nucleus }) => family_nucleus);
+            const isUnder9YearsOld = compareDateWithNumber(values.birthdate, 9, '<');
+            columnsPerson[columnsPerson.length - 1].cellProps = {
+              children: ({ row, value }) =>
+                <>
+                  <Button
+                    textColor={colors.primary}
+                    onPress={() => {
+                      const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
+                      newPersons.splice(Number(row.id), 1);
+                      newPersons.forEach((person, index) => {
+                        person.id = index;
+                      });
+                      setValues({
+                        ...familyInitialValues,
+                        persons: newPersons,
+                      });
+                    }}
+                  >
+                    Eliminar
+                  </Button>
+                  <Button
+                    textColor={colors.primaryBlue}
+                    onPress={() => {
+                      const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
+                      const person = newPersons.find(({ id }) => id === row.id);
+                      if (person) {
+                        newPersons.splice(Number(row.id), 1);
+                        setValues({
+                          ...person,
+                          persons: newPersons,
+                        });
+                      }
+                    }}
+                  >
+                    Editar
+                  </Button>
+                </>
+            }
+            console.log(JSON.stringify(values, null, 2));
               return (
                 <>
                   <Card.Content>
-                  <View style={{
-                    marginVertical: 10,
-                  }}>
-                    <TouchableOpacity onPress={toggleOpen2}>
-                      <View>
-                        <TextField
-                          placeholder='Ej: DD-MM-YYYY'
-                          autoComplete='birthdate-full'
-                          label="Fecha de Nacimiento"
-                          value={moment(values.birthdate).format('DD-MM-YYYY')}
-                          error={Boolean(errors.birthdate)}
-                          right={<TextInput.Icon icon="calendar" disabled />}
-                          errorTitle={errors.birthdate}
-                          editable={false}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                    <DateTimePickerModal
-                      date={values.birthdate}
-                      isVisible={isOpen2}
-                      mode="date"
-                      onConfirm={value => {
-                        toggleOpen2();
-                        setFieldValue('birthdate', value);
+                    <DatePicker
+                      errorTitle={errors.birthdate}
+                      error={Boolean(errors.birthdate)}
+                      date={new Date(values.birthdate)}
+                      label="Fecha de Nacimiento"
+                      DatePickerProps={{
+                        onConfirm: value => {
+                          if (compareDateWithNumber(value, 9, '<'))
+                            setFieldValue('identity_card', false);
+                          setFieldValue('birthdate', value);
+                        },
+                        onCancel: () => { },
                       }}
-                      onCancel={toggleOpen2}
-                      locale='es'
                     />
-                  </View>
+
                   <View style={{
                     flexDirection: 'row',
                   }}>
 
-                    <View style={{
+                      {!isUnder9YearsOld &&
+                        <View
+                          style={{
                       marginLeft: 15,
-                    }}>
+                          }}
+                        >
                       <Text variant='labelSmall'>Cedulado</Text>
                       <DropDownPicker
                           setValue={() => { }}
                         items={identityCard}
                         open={isOpen3}
                         setOpen={toggleOpen3}
-                        value={under9YearsOld ? false : values.identity_card}
+                          value={values.identity_card}
                         dropDownDirection="TOP"
-                        onSelectItem={({ value }) => setFieldValue('identity_card', under9YearsOld ? false : value)}
+                          onSelectItem={({ value }) => setFieldValue('identity_card', value)}
                         placeholder=''
                         labelStyle={{
                           fontSize: 16,
@@ -109,9 +118,10 @@ const FamilyHomeScreen = () => {
                           width: 150,
                         }}
                       />
-                    </View>
+                        </View>
+                      }
                     <View style={{
-                      marginLeft: 15,
+                        marginLeft: 10,
                     }}>
                       <Text variant='labelSmall'>Nacionalidad</Text>
                       <DropDownPicker
@@ -119,9 +129,9 @@ const FamilyHomeScreen = () => {
                         items={Nationality}
                         open={isOpen}
                         setOpen={toggleOpen}
-                        value={values.nationality}
+                          value={values.naturalized}
                         dropDownDirection="TOP"
-                        onSelectItem={({ value }) => setFieldValue('nationality', value)}
+                          onSelectItem={({ value }) => setFieldValue('naturalized', value)}
                         placeholder=''
                         labelStyle={{
                           fontSize: 16,
@@ -136,6 +146,35 @@ const FamilyHomeScreen = () => {
                         }}
                       />
                     </View>
+
+                      {!existFamilyNucleusInPersons &&
+                        <View style={{
+                          marginLeft: 10,
+                        }}>
+                          <Text variant='labelSmall'>Es Jefe De Familia</Text>
+                          <DropDownPicker
+                            setValue={() => { }}
+                            items={familyNucleusOpt}
+                            open={isOpen2}
+                            setOpen={toggleOpen2}
+                            value={values.family_nucleus}
+                            dropDownDirection="TOP"
+                            onSelectItem={({ value }) => setFieldValue('family_nucleus', value)}
+                            placeholder=''
+                            labelStyle={{
+                              fontSize: 16,
+                              color: 'black',
+                              fontWeight: 'bold',
+                            }}
+                            style={{
+                              width: 80,
+                            }}
+                            dropDownContainerStyle={{
+                              width: 80,
+                            }}
+                          />
+                        </View>
+                      }
                   </View>
                   <TextField
                     placeholder='Ej: Juan Pedro'
@@ -186,8 +225,8 @@ const FamilyHomeScreen = () => {
                   <TextField
                     placeholder='Ej: 00000000'
                     inputMode='numeric'
-                    label={`Documento de identidad${!values.identity_card ? ' del Representante' : ''}`}
-                      value={values.identification_card}
+                      label={`Documento de identidad${!values.identity_card && isUnder9YearsOld ? ' del Representante' : ''}`}
+                      value={values.identification_card.toString()}
                     onChangeText={handleChange('identification_card')}
                     error={Boolean(errors.identification_card)}
                     errorTitle={errors.identification_card}
@@ -224,7 +263,24 @@ const FamilyHomeScreen = () => {
 
                     <Button
                       onPress={() => {
+                        const newValues = {
+                          ...values
+                        };
+                        newValues.birthdate = moment(newValues.birthdate).format('YYYY-MM-DD');
+                        if (newValues?.persons !== undefined)
+                          delete newValues?.persons;
 
+                        const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
+
+                        newValues.id = typeof newValues.id === 'number' ? newValues.id : newPersons.length;
+
+
+                        newPersons.splice(Number(newValues.id), 0, newValues);
+
+                        setValues({
+                          ...familyInitialValues,
+                          persons: newPersons,
+                        });
                       }}
                       style={{
                         marginTop: 16,
@@ -240,6 +296,7 @@ const FamilyHomeScreen = () => {
                     >
                       Agregar
                     </Button>
+                    <DataGrid rows={values.persons || []} columns={columnsPerson} />
                   </Card.Content>
                   <Card.Actions>
                     <Button onPress={handleSubmit} style={{
