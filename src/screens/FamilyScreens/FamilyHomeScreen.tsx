@@ -3,14 +3,14 @@ import moment from 'moment';
 import { ScrollView, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Button, Card, RadioButton, Text } from 'react-native-paper';
-import DataGrid from '../components/DataGrid';
-import DatePicker from '../components/DatePicker';
-import { TextField } from '../components/TextField';
-import { Nationality, columnsPerson, familyInitialValues, familyNucleusOpt, identityCard } from '../data';
-import { compareDateWithNumber } from '../helpers';
-import useDropdown from '../hooks/useDropDown';
-import { Person } from '../interfaces/FamilyHomeInterfaces';
-import { colors } from '../theme/appTheme';
+import DataGrid from '../../components/DataGrid';
+import DatePicker from '../../components/DatePicker';
+import { TextField } from '../../components/TextField';
+import { Nationality, columnsPerson, familyInitialValues, familyNucleusOpt, identityCard } from '../../data';
+import { compareDateWithNumber } from '../../helpers';
+import useDropdown from '../../hooks/useDropDown';
+import { Person } from '../../interfaces/FamilyHomeInterfaces';
+import { colors } from '../../theme/appTheme';
 
 const FamilyHomeScreen = () => {
   const { isOpen, toggleOpen } = useDropdown(false);
@@ -26,7 +26,7 @@ const FamilyHomeScreen = () => {
         <Formik
           initialValues={familyInitialValues}
           onSubmit={values => console.log(JSON.stringify(values, null, 2))}
-          >
+        >
           {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue, resetForm, setValues }) => {
             const existFamilyNucleusInPersons = values.persons?.some(({ family_nucleus }) => family_nucleus);
             const isUnder9YearsOld = compareDateWithNumber(values.birthdate, 9, '<');
@@ -66,62 +66,62 @@ const FamilyHomeScreen = () => {
                     Editar
                   </Button>
                 </>
-            }
+            };
             console.log(JSON.stringify(values, null, 2));
-              return (
-                <>
-                  <Card.Content>
-                    <DatePicker
-                      errorTitle={errors.birthdate}
-                      error={Boolean(errors.birthdate)}
-                      date={new Date(values.birthdate)}
-                      label="Fecha de Nacimiento"
-                      DatePickerProps={{
-                        onConfirm: value => {
-                          if (compareDateWithNumber(value, 9, '<'))
-                            setFieldValue('identity_card', false);
-                          setFieldValue('birthdate', value);
-                        },
-                        onCancel: () => { },
-                      }}
-                    />
+            return (
+              <>
+                <Card.Content>
+                  <DatePicker
+                    errorTitle={errors.birthdate}
+                    error={Boolean(errors.birthdate)}
+                    date={new Date(values.birthdate)}
+                    label="Fecha de Nacimiento"
+                    DatePickerProps={{
+                      onConfirm: value => {
+                        if (compareDateWithNumber(value, 9, '<'))
+                          setFieldValue('identity_card', false);
+                        setFieldValue('birthdate', value);
+                      },
+                      onCancel: () => { },
+                    }}
+                  />
 
                   <View style={{
                     flexDirection: 'row',
                   }}>
 
-                      {!isUnder9YearsOld &&
-                        <View
-                          style={{
-                      marginLeft: 15,
-                          }}
-                        >
-                      <Text variant='labelSmall'>Cedulado</Text>
-                      <DropDownPicker
-                          setValue={() => { }}
-                        items={identityCard}
-                        open={isOpen3}
-                        setOpen={toggleOpen3}
-                          value={values.identity_card}
-                        dropDownDirection="TOP"
-                          onSelectItem={({ value }) => setFieldValue('identity_card', value)}
-                        placeholder=''
-                        labelStyle={{
-                          fontSize: 16,
-                          color: 'black',
-                          fontWeight: 'bold',
-                        }}
+                    {!isUnder9YearsOld &&
+                      <View
                         style={{
-                          width: 150,
+                          marginLeft: 15,
                         }}
-                        dropDownContainerStyle={{
-                          width: 150,
-                        }}
-                      />
-                        </View>
-                      }
+                      >
+                        <Text variant='labelSmall'>Cedulado</Text>
+                        <DropDownPicker
+                          setValue={() => { }}
+                          items={identityCard}
+                          open={isOpen3}
+                          setOpen={toggleOpen3}
+                          value={values.identity_card}
+                          dropDownDirection="TOP"
+                          onSelectItem={({ value }) => setFieldValue('identity_card', value)}
+                          placeholder=''
+                          labelStyle={{
+                            fontSize: 16,
+                            color: 'black',
+                            fontWeight: 'bold',
+                          }}
+                          style={{
+                            width: 150,
+                          }}
+                          dropDownContainerStyle={{
+                            width: 150,
+                          }}
+                        />
+                      </View>
+                    }
                     <View style={{
-                        marginLeft: 10,
+                      marginLeft: 10,
                     }}>
                       <Text variant='labelSmall'>Nacionalidad</Text>
                       <DropDownPicker
@@ -129,9 +129,9 @@ const FamilyHomeScreen = () => {
                         items={Nationality}
                         open={isOpen}
                         setOpen={toggleOpen}
-                          value={values.naturalized}
+                        value={values.naturalized}
                         dropDownDirection="TOP"
-                          onSelectItem={({ value }) => setFieldValue('naturalized', value)}
+                        onSelectItem={({ value }) => setFieldValue('naturalized', value)}
                         placeholder=''
                         labelStyle={{
                           fontSize: 16,
@@ -147,34 +147,34 @@ const FamilyHomeScreen = () => {
                       />
                     </View>
 
-                      {!existFamilyNucleusInPersons &&
-                        <View style={{
-                          marginLeft: 10,
-                        }}>
-                          <Text variant='labelSmall'>Es Jefe De Familia</Text>
-                          <DropDownPicker
-                            setValue={() => { }}
-                            items={familyNucleusOpt}
-                            open={isOpen2}
-                            setOpen={toggleOpen2}
-                            value={values.family_nucleus}
-                            dropDownDirection="TOP"
-                            onSelectItem={({ value }) => setFieldValue('family_nucleus', value)}
-                            placeholder=''
-                            labelStyle={{
-                              fontSize: 16,
-                              color: 'black',
-                              fontWeight: 'bold',
-                            }}
-                            style={{
-                              width: 80,
-                            }}
-                            dropDownContainerStyle={{
-                              width: 80,
-                            }}
-                          />
-                        </View>
-                      }
+                    {!existFamilyNucleusInPersons &&
+                      <View style={{
+                        marginLeft: 10,
+                      }}>
+                        <Text variant='labelSmall'>Es Jefe De Familia</Text>
+                        <DropDownPicker
+                          setValue={() => { }}
+                          items={familyNucleusOpt}
+                          open={isOpen2}
+                          setOpen={toggleOpen2}
+                          value={values.family_nucleus}
+                          dropDownDirection="TOP"
+                          onSelectItem={({ value }) => setFieldValue('family_nucleus', value)}
+                          placeholder=''
+                          labelStyle={{
+                            fontSize: 16,
+                            color: 'black',
+                            fontWeight: 'bold',
+                          }}
+                          style={{
+                            width: 80,
+                          }}
+                          dropDownContainerStyle={{
+                            width: 80,
+                          }}
+                        />
+                      </View>
+                    }
                   </View>
                   <TextField
                     placeholder='Ej: Juan Pedro'
@@ -225,8 +225,8 @@ const FamilyHomeScreen = () => {
                   <TextField
                     placeholder='Ej: 00000000'
                     inputMode='numeric'
-                      label={`Documento de identidad${!values.identity_card && isUnder9YearsOld ? ' del Representante' : ''}`}
-                      value={values.identification_card.toString()}
+                    label={`Documento de identidad${!values.identity_card && isUnder9YearsOld ? ' del Representante' : ''}`}
+                    value={values.identification_card.toString()}
                     onChangeText={handleChange('identification_card')}
                     error={Boolean(errors.identification_card)}
                     errorTitle={errors.identification_card}
@@ -248,74 +248,74 @@ const FamilyHomeScreen = () => {
                     />
                   }
 
-                <TextField
-                  inputMode='tel'
-                  autoComplete='tel'
-                  placeholder="Ej: +(Código de area) 000-0000000)"
-                  label="Numero de Teléfono"
-                  value={values.telephone}
-                  onChangeText={handleChange('telephone')}
-                  error={Boolean(errors.telephone)}
-                  errorTitle={errors.telephone}
-                />
+                  <TextField
+                    inputMode='tel'
+                    autoComplete='tel'
+                    placeholder="Ej: +(Código de area) 000-0000000)"
+                    label="Numero de Teléfono"
+                    value={values.telephone}
+                    onChangeText={handleChange('telephone')}
+                    error={Boolean(errors.telephone)}
+                    errorTitle={errors.telephone}
+                  />
 
 
 
-                    <Button
-                      onPress={() => {
-                        const newValues = {
-                          ...values
-                        };
-                        newValues.birthdate = moment(newValues.birthdate).format('YYYY-MM-DD');
-                        if (newValues?.persons !== undefined)
-                          delete newValues?.persons;
+                  <Button
+                    onPress={() => {
+                      const newValues = {
+                        ...values
+                      };
+                      newValues.birthdate = moment(newValues.birthdate).format('YYYY-MM-DD');
+                      if (newValues?.persons !== undefined)
+                        delete newValues?.persons;
 
-                        const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
+                      const newPersons: Person[] = values.persons?.length ? [...values.persons] : [];
 
-                        newValues.id = typeof newValues.id === 'number' ? newValues.id : newPersons.length;
+                      newValues.id = typeof newValues.id === 'number' ? newValues.id : newPersons.length;
 
 
-                        newPersons.splice(Number(newValues.id), 0, newValues);
+                      newPersons.splice(Number(newValues.id), 0, newValues);
 
-                        setValues({
-                          ...familyInitialValues,
-                          persons: newPersons,
-                        });
-                      }}
-                      style={{
-                        marginTop: 16,
-                        backgroundColor: colors.primary,
-                        borderRadius: 16,
-                        width: "30%",
-                        alignSelf: 'flex-end',
-                      }}
-                      labelStyle={{
-                        color: 'white',
-                        fontSize: 16,
-                      }}
-                    >
-                      Agregar
-                    </Button>
-                    <DataGrid rows={values.persons || []} columns={columnsPerson} />
-                  </Card.Content>
-                  <Card.Actions>
-                    <Button onPress={handleSubmit} style={{
+                      setValues({
+                        ...familyInitialValues,
+                        persons: newPersons,
+                      });
+                    }}
+                    style={{
                       marginTop: 16,
                       backgroundColor: colors.primary,
                       borderRadius: 16,
-                      flex: 1,
-                      alignSelf: 'center'
+                      width: "30%",
+                      alignSelf: 'flex-end',
                     }}
-                      labelStyle={{
-                        color: 'white',
-                        fontSize: 16,
-                      }}
+                    labelStyle={{
+                      color: 'white',
+                      fontSize: 16,
+                    }}
+                  >
+                    Agregar
+                  </Button>
+                  <DataGrid rows={values.persons || []} columns={columnsPerson} />
+                </Card.Content>
+                <Card.Actions>
+                  <Button onPress={handleSubmit} style={{
+                    marginTop: 16,
+                    backgroundColor: colors.primary,
+                    borderRadius: 16,
+                    flex: 1,
+                    alignSelf: 'center'
+                  }}
+                    labelStyle={{
+                      color: 'white',
+                      fontSize: 16,
+                    }}
 
-                    >Enviar Datos del Núcleo Familiar</Button>
+                  >Enviar Datos del Núcleo Familiar</Button>
 
-                  </Card.Actions>
-                </>
-              );
+                </Card.Actions>
+              </>
+            );
           }}
         </Formik>
       </Card>

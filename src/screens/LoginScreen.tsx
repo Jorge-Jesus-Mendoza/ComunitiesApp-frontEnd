@@ -98,6 +98,7 @@ export const LoginScreen = ({ navigation }: Props) => {
               onChangeText={(value: any) =>
                 setFieldValue('identification_card', Number(value))
               }
+              keyboardType="numeric"
               error={errors?.identification_card}
             />
 
