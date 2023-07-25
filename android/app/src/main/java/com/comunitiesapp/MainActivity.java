@@ -33,7 +33,7 @@ public class MainActivity extends ReactActivity {
         );
   }
 
-  @Override
+   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
   }
