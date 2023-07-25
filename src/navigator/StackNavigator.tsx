@@ -12,7 +12,7 @@ import {RootTopTabParams} from './TopTabNavigator';
 export type RootStackParams = {
   FamilyHomeScreen: undefined;
   FamilyListScreen: undefined;
-  DashboardScreen: undefined;
+  DashboardHomeScreen: undefined;
   ProgramsHomeScreen: undefined;
 };
 

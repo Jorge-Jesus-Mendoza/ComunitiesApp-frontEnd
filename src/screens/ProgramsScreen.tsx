@@ -1,32 +1,29 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Card, RadioButton, Text, TextInput} from 'react-native-paper';
+import React, {useEffect, useState} from 'react';
+import {Button, Card} from 'react-native-paper';
 import {ScrollView, View, useWindowDimensions} from 'react-native';
 import {styles, colors} from '../theme/appTheme';
-import {DataTable} from 'react-native-paper';
-import ListItems from '../components/ListItems';
 import communityApi from '../api/communityApi';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
-import {Formik, useFormik} from 'formik';
+import {useFormik} from 'formik';
 import {TextField} from '../components/TextField';
-import DropDownPicker, {ItemType} from 'react-native-dropdown-picker';
+import {ItemType} from 'react-native-dropdown-picker';
 import useDropdown from '../hooks/useDropDown';
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import SelectLoader from '../components/SelectLoader';
+import {
+  columsPrograms,
+  priorities,
+  programInitialValues,
+} from '../data/ProgramsHomeData';
+import DataGrid from '../components/DataGrid';
 
 export const ProgramsScreen = () => {
-  const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
   const {width, height} = useWindowDimensions();
-  const [itemsPerPage, onItemsPerPageChange] = React.useState(
-    numberOfItemsPerPageList[0],
-  );
   const [Municipalities, setMunicipalities] = useState(null);
   const [loading, setLoading] = useState(false);
   const [Parishes, setParishes] = useState([]);
   const [Programs, setPrograms] = useState(null);
-  const [flag, setFlag] = useState(false);
   const {isOpen, toggleOpen} = useDropdown(false);
   const {isOpen: isOpen2, toggleOpen: toggleOpen2} = useDropdown(false);
   const {isOpen: isOpen3, toggleOpen: toggleOpen3} = useDropdown(false);
@@ -40,21 +37,32 @@ export const ProgramsScreen = () => {
     resetForm,
     setSubmitting,
   } = useFormik({
-    initialValues: {
-      id_municipality: '',
-      id_parish: '',
-      priority: '',
-      name: '',
-    },
+    initialValues: programInitialValues,
 
     onSubmit(values, formikHelpers) {
       console.log(values);
       setSubmitting(true);
+      setPrograms(null);
       communityApi
-        .post('/location/management/create/program', values)
-        .then(response => {
-          resetForm();
-          setSubmitting(false);
+        .post('/management/create/program', values)
+        .then(() => {
+          communityApi.get('/management/programs').then(response => {
+            let list = [];
+            response.data.forEach((value: any, index: number) => {
+              let priority = priorities.filter(item =>
+                item?.value?.includes(`${value.priority}`),
+              );
+              list.push({
+                ...value,
+                priority: priority[0].label,
+                date_created: moment(value.date_created).format('YYYY-MM-DD'),
+              });
+            });
+            setPrograms(list);
+            resetForm();
+            setSubmitting(false);
+            setFlag(true);
+          });
         })
         .catch(error => {
           if (error.response) {
@@ -66,6 +74,7 @@ export const ProgramsScreen = () => {
             );
           }
           setSubmitting(false);
+          setFlag(true);
           console.error(error);
         });
     },
@@ -87,32 +96,7 @@ export const ProgramsScreen = () => {
     },
   });
 
-  const priorities = [
-    {
-      label: 'Muy Baja',
-      value: '1',
-    },
-    {
-      label: 'Baja',
-      value: '2',
-    },
-    {
-      label: 'Normal',
-      value: '3',
-    },
-    {
-      label: 'Alta',
-      value: '4',
-    },
-    {
-      label: 'Muy alta',
-      value: '5',
-    },
-  ];
-
   useEffect(() => {
-    // if (!flag) {
-    // setFlag(true);
     axios
       .all([
         communityApi.get('/location/municipality/5'),
@@ -121,13 +105,27 @@ export const ProgramsScreen = () => {
       .then(
         axios.spread((municipality, programs) => {
           setMunicipalities(municipality.data);
-          setPrograms(programs.data);
+          let list = [];
+          programs.data.forEach((value: any, index: number) => {
+            let priority = priorities.filter(item =>
+              item?.value?.includes(`${value.priority}`),
+            );
+            list.push({
+              ...value,
+              priority: priority[0].label,
+              date_created: moment(value.date_created).format('YYYY-MM-DD'),
+            });
+          });
+          setPrograms(list);
+          console.log(
+            '🚀 ~ file: ProgramsScreen.tsx:116 ~ axios.spread ~ list:',
+            list,
+          );
         }),
       )
       .catch(err => {
         console.log('FAIL', err);
       });
-    // }
 
     return () => {
       setMunicipalities(null);
@@ -142,63 +140,7 @@ export const ProgramsScreen = () => {
     errors?.id_parish ||
     errors?.priority;
 
-  const collums = [
-    {
-      type: 'text',
-      headerName: 'Nombre',
-    },
-    {
-      type: 'text',
-      headerName: 'Prioridad',
-    },
-    {
-      type: 'text',
-      headerName: 'Fecha de creación',
-    },
-  ];
-
-  React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
-
-  const handleFindPriority = (value: string) => {
-    let priority = priorities.filter(item => item?.value?.includes(`${value}`));
-
-    return priority[0].label;
-  };
-
-  const _renderItem = ({item}: any) => (
-    <DataTable.Row>
-      <DataTable.Cell
-        style={{
-          justifyContent: 'center',
-          marginHorizontal: 10,
-        }}>
-        {item?.name}
-      </DataTable.Cell>
-      <DataTable.Cell
-        style={{
-          justifyContent: 'center',
-          marginHorizontal: 10,
-        }}>
-        {handleFindPriority(item.priority)}
-      </DataTable.Cell>
-
-      <DataTable.Cell
-        style={{
-          justifyContent: 'center',
-          marginHorizontal: 10,
-        }}>
-        {moment(item?.date_created).format('LLL')}
-      </DataTable.Cell>
-    </DataTable.Row>
-  );
-
   const handleSublist = (field: string, value: ItemType<string>) => {
-    console.log(
-      '🚀 ~ file: ProgramsScreen.tsx:198 ~ handleSublist ~ value:',
-      value,
-    );
     setFieldValue(field, value);
     setParishes([]);
     setFieldValue('id_parish', '');
@@ -305,16 +247,15 @@ export const ProgramsScreen = () => {
                     <Button
                       style={{
                         marginTop: 16,
-                        backgroundColor:
-                          isFormValid || !isSubmitting
-                            ? colors.primary
-                            : 'grey',
+                        backgroundColor: !isFormValid ? colors.primary : 'grey',
                         borderRadius: 16,
                       }}
                       onPress={
-                        isFormValid || !isSubmitting
+                        !isFormValid
                           ? () => handleSubmit()
-                          : () => {}
+                          : () => {
+                              console.log('nope');
+                            }
                       }
                       labelStyle={{
                         color: 'white',
@@ -326,17 +267,15 @@ export const ProgramsScreen = () => {
                 </Card.Content>
               </Card>
             </View>
-            <ListItems
-              items={Programs}
-              collums={collums}
-              setPage={setPage}
-              page={page}
-              numberOfItemsPerPageList={numberOfItemsPerPageList}
-              itemsPerPage={itemsPerPage}
-              onItemsPerPageChange={onItemsPerPageChange}
-              _renderItem={_renderItem}
-              width={width}
-            />
+
+            <Card
+              style={{
+                margin: 16,
+                backgroundColor: 'white',
+                width: width * 0.9,
+              }}>
+              <DataGrid rows={Programs || []} columns={columsPrograms} />
+            </Card>
           </>
         )) || (
           <View

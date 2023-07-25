@@ -1,8 +1,7 @@
-import { initialParams } from "../interfaces";
+import {initialParams} from '../interfaces';
 
 const defaultInitialParams: initialParams = {
-  initialRouteName: 'DashboardScreen',
+  initialRouteName: 'DashboardHomeScreen',
   screenOptions: {},
 };
-export { defaultInitialParams };
-
+export {defaultInitialParams};
