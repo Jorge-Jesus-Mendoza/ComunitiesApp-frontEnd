@@ -1,13 +1,13 @@
-import { RouteProp } from '@react-navigation/native';
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import {
-  StackNavigationProp,
-  createStackNavigator,
+  createStackNavigator
 } from '@react-navigation/stack';
 import React from 'react';
 import { defaultInitialParams } from '../data';
 import { Route } from '../interfaces/routesInterfaces';
 import { DashboardHome, FamilyHome, FamilyList, ProgramsHome } from '../routes';
 import { RootTopTabParams } from './TopTabNavigator';
+
 
 export type RootStackParams = {
   FamilyHomeScreen: undefined;
@@ -16,15 +16,12 @@ export type RootStackParams = {
   ProgramsHomeScreen: undefined;
 };
 
-type StackScreenProps = {
-  route: RouteProp<RootTopTabParams>;
-  navigation: StackNavigationProp<RootStackParams>;
-};
 const Stack = createStackNavigator<RootStackParams>();
 
 const RoutesList: Route[] = [DashboardHome, FamilyHome, FamilyList, ProgramsHome];
 
-const StackNavigator = ({route, navigation, ...props}: StackScreenProps) => {
+const StackNavigator = ({ route, navigation, ...props }: MaterialTopTabScreenProps<RootTopTabParams>) => {
+  console.log('route', props);
   const { initialRouteName, screenOptions } = route.params ?? defaultInitialParams;
   console.log('initialRouteName', initialRouteName);
   return (
