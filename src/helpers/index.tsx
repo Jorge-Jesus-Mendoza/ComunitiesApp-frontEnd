@@ -1,1 +1,2 @@
-export * from './FamilyHomeHelpers';
+export { compareDateWithNumber } from './FamilyHomeHelpers';
+

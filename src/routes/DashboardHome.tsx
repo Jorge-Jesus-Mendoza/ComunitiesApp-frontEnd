@@ -1,9 +1,9 @@
-import { RootStackParams } from '../navigator/StackNavigator';
-import { DashboardScreen } from '../screens/DashboardScreen';
+import {RootStackParams} from '../navigator/StackNavigator';
+import {DashboardScreen} from '../screens/DashboardScreen';
 
 export const DashboardHome = {
-  name: 'DashboardScreen' as keyof RootStackParams,
+  name: 'DashboardHomeScreen' as keyof RootStackParams,
   component: DashboardScreen,
-  options: { title: 'Inicio' },
-  initialParams: { initialRouteName: 'DashboardScreen' as keyof RootStackParams },
+  options: {title: 'Inicio'},
+  // initialParams: {initialRouteName: 'DashboardScreen' as keyof RootStackParams},
 };

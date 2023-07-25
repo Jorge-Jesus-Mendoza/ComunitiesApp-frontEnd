@@ -1,4 +1,4 @@
-import {ReactNode, createContext, useReducer} from 'react';
+import {ReactNode, createContext, useReducer, useState} from 'react';
 import authReducer from './authReducer';
 import {registerUserItem, userItem} from '../../interfaces/authInterfaces';
 // Define How looks and what information i have here
@@ -22,7 +22,7 @@ export const authInitialState: AuthState = {
 
 export interface AuthContextProps {
   authState: AuthState;
-  logIn: (item: userItem) => void;
+  logIn: (item: userItem, navigator: any) => void;
   sigIn: (item: userItem) => void;
   logOut: () => void;
 }
@@ -33,8 +33,18 @@ export const AuthContext = createContext({} as AuthContextProps);
 // Create the provider
 const AuthProvider = ({children}: {children: ReactNode}) => {
   const [authState, dispatch] = useReducer(authReducer, authInitialState);
-  const logIn = (item: userItem) => dispatch({type: 'logIn', payload: item});
+
+  const logIn = (item: userItem, navigator: any) => {
+    dispatch({type: 'logIn', payload: item});
+    navigator.navigate('TopTabNavigator');
+    setTimeout(() => {
+      logOut();
+      navigator.navigate('HomeScreen');
+    }, 1690152813);
+  };
+
   const sigIn = (item: userItem) => dispatch({type: 'sigIn', payload: item});
+
   const logOut = () => dispatch({type: 'logout'});
   return (
     <AuthContext.Provider

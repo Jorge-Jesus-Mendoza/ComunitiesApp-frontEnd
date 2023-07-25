@@ -4,7 +4,7 @@ import {
 } from '@react-navigation/stack';
 import React from 'react';
 import { defaultInitialParams } from '../data';
-import { Route } from '../interfaces/routesInterfaces';
+import { Route } from '../interfaces';
 import { DashboardHome, FamilyHome, FamilyList, ProgramsHome } from '../routes';
 import { RootTopTabParams } from './TopTabNavigator';
 
@@ -35,7 +35,7 @@ const StackNavigator = ({ route, navigation, ...props }: MaterialTopTabScreenPro
           },
           ...screenOptions,
         }}>
-        {RoutesList.map(({name, component, options, initialParams}, index) => (
+        {RoutesList.map(({ name = initialRouteName, component, options, initialParams }, index) => (
           <Stack.Screen
             key={`${index + 1}.-${name}`}
             name={name as keyof RootStackParams}

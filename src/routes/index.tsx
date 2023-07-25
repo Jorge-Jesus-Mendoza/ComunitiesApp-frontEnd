@@ -1,6 +1,6 @@
 export { Dashboard } from './Dashboard';
 export { DashboardHome } from './DashboardHome';
-export * from './FamilyRoutes';
+export { Family, FamilyHome, FamilyList } from './FamilyRoutes';
 export { Home } from './Home';
 export { Login } from './Login';
 export { Programs } from './Programs';
