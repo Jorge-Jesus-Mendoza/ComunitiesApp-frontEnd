@@ -10,7 +10,7 @@ This aplication it's still in development, his features and dependencies could c
 - [axios](https://github.com/axios/axios) for networking.
 - [react-native-config](https://github.com/luggit/react-native-config) to manage envionments.
 - [react-navigation](https://reactnavigation.org/) navigation library.
-- [react-native-paper(https://reactnativepaper.com/)] Components library
+- [react-native-paper](https://reactnativepaper.com/) Components library
 
 ## Folder structure
 
