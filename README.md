@@ -17,7 +17,6 @@ This aplication it's still in development, his features and dependencies could c
 This template follows a very simple project structure:
 
 - `src`: This folder is the main container of all the code inside your application.
-  - `actions`: This folder contains all actions that can be dispatched to redux.
   - `img`: Asset folder to store all images, vectors, etc.
   - `components`: Folder to store any common component that you use through your app (such as a generic button)
   - `routes`: Folder to store the routes of the app.
