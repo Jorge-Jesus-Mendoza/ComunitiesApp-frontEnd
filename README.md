@@ -1,3 +1,5 @@
+This aplication it's still under development, all of his features could change in the future.
+
 ## Prerequisites
 
 - [Node.js > 12](https://nodejs.org) and npm (Recommended: Use [nvm](https://github.com/nvm-sh/nvm))
