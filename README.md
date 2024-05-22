@@ -18,30 +18,16 @@ This template follows a very simple project structure:
 
 - `src`: This folder is the main container of all the code inside your application.
   - `actions`: This folder contains all actions that can be dispatched to redux.
-  - `assets`: Asset folder to store all images, vectors, etc.
+  - `img`: Asset folder to store all images, vectors, etc.
   - `components`: Folder to store any common component that you use through your app (such as a generic button)
-  - `constants`: Folder to store any kind of constant that you have.
-  - `controllers`: Folder to store all your network logic (you should have one controller per resource).
-  - `localization`: Folder to store the languages files.
-  - `navigation`: Folder to store the navigators.
-  - `reducers`: This folder should have all your reducers, and expose the combined result using its `index.js`
+  - `routes`: Folder to store the routes of the app.
   - `screens`: Folder that contains all your application screens/features.
-    - `Screen`: Each screen should be stored inside its folder and inside it a file for its code and a separate one for the styles and tests.
-      - `Screen.js`
-      - `Screen.styles.js`
-      - `Screen.test.js`
-  - `selectors`: Folder to store your selectors for each reducer.
-  - `storage`: Folder that contains the application storage logic.
-  - `store`: Folder to put all redux middlewares and the store.
-  - `test-utils`: Folder to store tests-related utilities and components.
+  - `hooks`: Folder to store the general functions of the app.
+  - `context`: Folder that contains the application context storage logic.
   - `theme`: Folder to store all the styling concerns related to the application theme.
   - `App.js`: Main component that starts your whole app.
   - `index.js`: Entry point of your application as per React-Native standards.
 
+Befor inicialize the project pull the mos stable branch called `Backupt-proyect`
 
-DEV: `yarn ios` or `yarn android`
-
-STG: `yarn ios:staging` or `yarn android:staging`
-
-PROD: `yarn ios:prod` o `yarn android:prod`
-
+DEV: `npx react-native run android` or `npx react-native run ios`
